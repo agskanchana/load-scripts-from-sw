@@ -4,7 +4,7 @@ Plugin Name: Loading scripts from service worker
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker
 Author URI: www.sameera.com
-Version: 1.0.0
+Version: 1.0.1
 
 */
 
