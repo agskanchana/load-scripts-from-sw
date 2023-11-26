@@ -61,8 +61,11 @@ if( !function_exists('carbon_fields_boot_plugin')){
         /* end */
     ) )
     ->add_tab( __( 'Facebook pixel' ), array(
-        Field::make( 'text', 'crb_email', __( 'Notification Email' ) ),
-        Field::make( 'text', 'crb_phone', __( 'Phone Number' ) ),
+        Field::make( 'text', 'fb_no_script', __( 'No script Image Source' ) ),
+        Field::make( 'html', 'fb_pixel_msg' )
+        ->set_html( '<h2>Put the script without Script tags</h2>' ),
+        Field::make( 'textarea', 'fb_pixel_code', __( 'Fb Pixel code' ) )
+
     ) );
 
 
@@ -71,6 +74,16 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
 
 
+function print_tracking_codes_in_header(){
+    if(carbon_get_theme_option('fb_no_script')){
+        ?>
+        <noscript>
+            <img height="1" width="1" style="display:none" src="<?php echo carbon_get_theme_option('fb_no_script');?>"/>
+        </noscript>
+        <?php
+    }
+}
+add_action('wp_head', 'print_tracking_codes_in_header');
 
 function print_tracking_codes(){
 
@@ -103,6 +116,15 @@ function print_tracking_codes(){
         }
 
     }
+
+    if(carbon_get_theme_option('fb_pixel_code')){
+        ?>
+        <script  type="text/partytown">
+            <?php echo carbon_get_theme_option('fb_pixel_code');?>
+        </script>
+        <?php
+    }
+
 
   }
 
