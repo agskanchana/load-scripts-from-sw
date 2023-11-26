@@ -4,13 +4,28 @@ Plugin Name: Loading scripts from service worker
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker
 Author URI: www.sameera.com
-Version: 1.0
+Version: 1.0.0
 
 */
 
+require 'includes/plugin-update-checker/plugin-update-checker.php';
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+	'https://github.com/agskanchana/load-scripts-from-sw/',
+	__FILE__,
+	'load-scripts-from-sw'
+);
+
+//Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('master');
+
+//Optional: If you're using a private repository, specify the access token like this:
+// $myUpdateChecker->setAuthentication('your-token-here');
+
 
 if( !function_exists('carbon_fields_boot_plugin')){
-    include_once( plugin_dir_path( __FILE__ ) . 'carbon-fields/carbon-fields-plugin.php' );
+    include_once( plugin_dir_path( __FILE__ ) . 'includes/carbon-fields/carbon-fields-plugin.php' );
   }
 
 
@@ -86,7 +101,7 @@ function partytown_configuration() {
 	?>
 	<script>
 		window.partytown = <?php echo wp_json_encode( $config ); ?>;
-        /* Partytown 0.8.0 - MIT builder.io */
+        /* party town js*/
         !function(t,e,n,i,r,o,a,d,s,c,l,p){function u(){p||(p=1,"/"==(a=(o.lib||"/~partytown/")+(o.debug?"debug/":""))[0]&&(s=e.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(d=setTimeout(f,1e4),e.addEventListener("pt0",w),r?h(1):n.serviceWorker?n.serviceWorker.register(a+(o.swPath||"partytown-sw.js"),{scope:a}).then((function(t){t.active?h():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&h()}))}),console.error):f())))}function h(t){c=e.createElement(t?"script":"iframe"),t||(c.setAttribute("style","display:block;width:0;height:0;border:0;visibility:hidden"),c.setAttribute("aria-hidden",!0)),c.src=a+"partytown-"+(t?"atomics.js?v=0.8.0":"sandbox-sw.html?"+Date.now()),e.querySelector(o.sandboxParent||"body").appendChild(c)}function f(n,r){for(w(),i==t&&(o.forward||[]).map((function(e){delete t[e.split(".")[0]]})),n=0;n<s.length;n++)(r=e.createElement("script")).innerHTML=s[n].innerHTML,e.head.appendChild(r);c&&c.parentNode.removeChild(c)}function w(){clearTimeout(d)}o=t.partytown||{},i==t&&(o.forward||[]).map((function(e){l=t,e.split(".").map((function(e,n,i){l=l[i[n]]=n+1<i.length?"push"==i[n+1]?[]:l[i[n]]||{}:function(){(t._ptf=t._ptf||[]).push(i,arguments)}}))})),"complete"==e.readyState?u():(t.addEventListener("DOMContentLoaded",u),t.addEventListener("load",u))}(window,document,navigator,top,window.crossOriginIsolated);
 	</script>
 	<?php
