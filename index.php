@@ -40,7 +40,12 @@ if( !function_exists('carbon_fields_boot_plugin')){
     ->add_tab( __( 'Google analytic' ), array(
         Field::make( 'text', 'measurement_id', __( 'Measurement ID' ) ),
 
-
+        Field::make( 'select', 'method', __( 'Method' ) )
+        ->set_options( array(
+            'Service Worker' => 'Service Worker',
+            'Mouse moment' => 'Mouse moment',
+            'General' => 'General',
+        ) ),
         Field::make( 'checkbox', 'ga_show_custom', 'Custom' ),
 
 
@@ -77,6 +82,13 @@ if( !function_exists('carbon_fields_boot_plugin')){
     ) )
     ->add_tab( __( 'Facebook pixel' ), array(
         Field::make( 'text', 'fb_no_script', __( 'No script Image Source' ) ),
+        Field::make( 'select', 'fb_method', __( 'Method' ) )
+        ->set_options( array(
+            'Service Worker' => 'Service Worker',
+            'Mouse moment' => 'Mouse moment',
+            'General' => 'General',
+        ) ),
+
         Field::make( 'html', 'fb_pixel_msg' )
         ->set_html( '<h2>Put the script without Script tags</h2>' ),
         Field::make( 'textarea', 'fb_pixel_code', __( 'Fb Pixel code' ) )
@@ -138,6 +150,8 @@ function print_tracking_codes(){
 
     }else{
         if(carbon_get_theme_option('measurement_id')){
+             if(carbon_get_theme_option('method') == 'Service Worker'){
+
             ?>
                 <script  type="text/partytown" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo carbon_get_theme_option('measurement_id');?>"></script>
                 <script  type="text/partytown">
@@ -147,17 +161,52 @@ function print_tracking_codes(){
 
                 gtag('config', '<?php echo carbon_get_theme_option('measurement_id');?>');
                 </script>
+
             <?php
+            }
+            if(carbon_get_theme_option('method') == 'Mouse moment'){
+                ?>
+
+                <?php
+            }
+            if(carbon_get_theme_option('method') == 'General'){
+                ?>
+
+                <script   async src="https://www.googletagmanager.com/gtag/js?id=<?php echo carbon_get_theme_option('measurement_id');?>"></script>
+                <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '<?php echo carbon_get_theme_option('measurement_id');?>');
+                </script>
+                <?php
+            }
         }
 
     }
 
     if(carbon_get_theme_option('fb_pixel_code')){
+        if(carbon_get_theme_option('fb_method') == 'Service Worker'){
         ?>
         <script  type="text/partytown">
             <?php echo carbon_get_theme_option('fb_pixel_code');?>
         </script>
+
         <?php
+        }
+        if(carbon_get_theme_option('fb_method') == 'Mouse moment'){
+            ?>
+           <?php
+        }
+        if(carbon_get_theme_option('fb_method') == 'General'){
+            ?>
+        <script>
+            <?php echo carbon_get_theme_option('fb_pixel_code');?>
+        </script>
+           <?php
+        }
+
     }
 
 
