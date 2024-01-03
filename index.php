@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Loading scripts from service worker
+Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
-Description: Loading theird party scripts from service worker
+Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
 Version: 1.0.3
 
@@ -36,7 +36,8 @@ if( !function_exists('carbon_fields_boot_plugin')){
   add_action( 'carbon_fields_register_fields', 'service_worker_fields' );
   function service_worker_fields() {
 
-    Container::make( 'theme_options', __( 'External Scripts' ) )
+    Container::make( 'theme_options', __( 'Ekwa Settings' ) )
+    ->set_icon( 'https://www.ekwa-testbench.info/logo-1.png' )
     ->add_tab( __( 'Google analytic' ), array(
         Field::make( 'text', 'measurement_id', __( 'Measurement ID' ) ),
 
@@ -101,7 +102,7 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
 
 function partytown_configuration() {
-
+    if(carbon_get_theme_option('method') == 'Service Worker'){
 
 	$config = array(
 		'lib' => str_replace( site_url(), '', plugin_dir_url( __FILE__ ) ) . 'js/partytown/',
@@ -117,6 +118,7 @@ function partytown_configuration() {
         !function(t,e,n,i,r,o,a,d,s,c,l,p){function u(){p||(p=1,"/"==(a=(o.lib||"/~partytown/")+(o.debug?"debug/":""))[0]&&(s=e.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(d=setTimeout(f,1e4),e.addEventListener("pt0",w),r?h(1):n.serviceWorker?n.serviceWorker.register(a+(o.swPath||"partytown-sw.js"),{scope:a}).then((function(t){t.active?h():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&h()}))}),console.error):f())))}function h(t){c=e.createElement(t?"script":"iframe"),t||(c.setAttribute("style","display:block;width:0;height:0;border:0;visibility:hidden"),c.setAttribute("aria-hidden",!0)),c.src=a+"partytown-"+(t?"atomics.js?v=0.8.0":"sandbox-sw.html?"+Date.now()),e.querySelector(o.sandboxParent||"body").appendChild(c)}function f(n,r){for(w(),i==t&&(o.forward||[]).map((function(e){delete t[e.split(".")[0]]})),n=0;n<s.length;n++)(r=e.createElement("script")).innerHTML=s[n].innerHTML,e.head.appendChild(r);c&&c.parentNode.removeChild(c)}function w(){clearTimeout(d)}o=t.partytown||{},i==t&&(o.forward||[]).map((function(e){l=t,e.split(".").map((function(e,n,i){l=l[i[n]]=n+1<i.length?"push"==i[n+1]?[]:l[i[n]]||{}:function(){(t._ptf=t._ptf||[]).push(i,arguments)}}))})),"complete"==e.readyState?u():(t.addEventListener("DOMContentLoaded",u),t.addEventListener("load",u))}(window,document,navigator,top,window.crossOriginIsolated);
 	</script>
 	<?php
+    }
 }
 
 add_action( 'wp_head',  'partytown_configuration', 1 );
