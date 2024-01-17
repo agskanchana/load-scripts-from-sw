@@ -1,0 +1,14 @@
+{
+        "name": "Party town",
+        "short_name": "pt",
+        "icons": [
+            { "src": "http://partytown.local/wp-content/uploads/2023/11/aa97e9091e040c5fb3d2b0a76e7374b6-1.webp", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+            { "src": "http://partytown.local/wp-content/uploads/2023/11/bc71c45e4c5bede024fc2004eecfd280.webp", "sizes": "192x192", "type": "image/png", "purpose": "maskable" }
+        ],
+        "background_color": "#B81F1F",
+        "theme_color": "#37EA0F",
+        "display": "standalone",
+        "orientation": "portrait",
+        "start_url": "http://partytown.local",
+        "scope": "/"
+    }

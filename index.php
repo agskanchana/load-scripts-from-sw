@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.0.3
+Version: 1.0.4
 
 */
 
@@ -94,12 +94,67 @@ if( !function_exists('carbon_fields_boot_plugin')){
         ->set_html( '<h2>Put the script without Script tags</h2>' ),
         Field::make( 'textarea', 'fb_pixel_code', __( 'Fb Pixel code' ) )
 
+    ) )
+
+    ->add_tab( __( 'Progressive web app' ), array(
+
+        Field::make( 'checkbox', 'pwa_disable', 'Disable' ),
+        Field::make( 'text', 'name', __( 'Name' ) ),
+        Field::make( 'text', 'short_name', __( 'Short Name' ) ),
+        Field::make( 'color', 'background_color', __( 'Background Color' ) ),
+        Field::make( 'color', 'theme_color', __( 'Theme Color' ) ),
+        Field::make( 'image', 'icon_512', __( 'Icon  Size: 512px' ) )
+            ->set_value_type( 'url' ),
+        Field::make( 'image', 'icon_192', __( 'Icon  Size: 192px' ) )
+        ->set_value_type( 'url' ),
+        Field::make( 'image', 'icon_144', __( 'Icon  Size: 144px' ) )
+            ->set_value_type( 'url' ),
+
+
     ) );
 
 
 
 }
 
+
+function show_pwa_on_header(){
+    if(!carbon_get_theme_option('pwa_disable')){
+        ?>
+
+<link rel="manifest" href="<?php echo plugin_dir_url( __FILE__ ); ?>manifest.json">
+<meta name="msapplication-TileColor" content="<?php echo carbon_get_theme_option('background_color'); ?>">
+<meta name="msapplication-TileImage" content="<?php echo carbon_get_theme_option('icon_144'); ?>">
+<meta name="theme-color" content="<?php echo carbon_get_theme_option('theme_color'); ?>">
+<script>
+// Check if service worker is available.
+<?php
+$cachName = get_option('siteurl');
+$cachName = preg_replace('#^https?://#i', '', $cachName);
+
+?>
+const cacheName = '<?php echo $cachName;?>-pwa-2.2.5';
+const startPage = '<?php echo get_option('siteurl');?>';
+const offlinePage = '<?php echo get_option('siteurl');?>';
+const filesToCache = [startPage, offlinePage];
+const neverCacheUrls = [/\/wp-admin/,/\/wp-login/,/preview=true/];
+
+
+if ('serviceWorker' in navigator) {
+
+navigator.serviceWorker.register('<?php echo plugin_dir_url( __FILE__ ); ?>js/pwa-sw.js').then(function(registration) {
+console.log('SW registration succeeded with scope:', registration.scope);
+}).catch(function(e) {
+console.log('SW registration failed with error:', e);
+});
+}
+</script>
+        <?php
+    }
+
+
+}
+add_action( 'wp_head',  'show_pwa_on_header', 1 );
 
 function partytown_configuration() {
     if(carbon_get_theme_option('method') == 'Service Worker'){
@@ -215,3 +270,52 @@ function print_tracking_codes(){
   }
 
   add_action('wp_footer', 'print_tracking_codes');
+
+
+  function option_pages_on_save(){
+
+
+
+   $json_content =  '{
+        "name": "'.carbon_get_theme_option('name').'",
+        "short_name": "'.carbon_get_theme_option('short_name').'",
+        "icons": [
+            { "src": "'.carbon_get_theme_option('icon_512').'", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+            { "src": "'.carbon_get_theme_option('icon_192').'", "sizes": "192x192", "type": "image/png", "purpose": "maskable" }
+        ],
+        "background_color": "'.carbon_get_theme_option('background_color').'",
+        "theme_color": "'.carbon_get_theme_option('theme_color').'",
+        "display": "standalone",
+        "orientation": "portrait",
+        "start_url": "'.get_option('siteurl').'",
+        "scope": "/"
+    }';
+
+    // Generate json file
+    if(file_put_contents(plugin_dir_path( __FILE__ )."manifest.json", $json_content)){
+        echo "worked";
+    }else{
+
+            echo "didnt work";
+
+    }
+
+// var_dump($_POST);
+    // exit();
+    ?>
+    <script>
+        console.log('its working');
+    </script>
+    <?php
+  }
+//   add_action('carbon_fields_theme_options_container_saved', 'option_pages_on_save');
+  add_action( 'carbon_fields_theme_options_container_saved', 'option_pages_on_save' );
+
+
+
+
+
+
+
+
+

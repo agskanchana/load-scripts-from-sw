@@ -1,0 +1,14 @@
+{
+    "name": "Orchard Park Dermatology",
+    "short_name": "Orchard Park Dermatology",
+    "icons": [
+        { "src": "https://www.ekwa-testbench.info/other-tests/ekwa-theme/wp-content/themes/ekwa/icons/512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+        { "src": "https://www.ekwa-testbench.info/other-tests/ekwa-theme/wp-content/themes/ekwa/icons/192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" }
+    ],
+    "background_color": "#ffffff",
+    "theme_color": "#0079c2",
+    "display": "standalone",
+    "orientation": "portrait",
+    "start_url": "hhttps://www.ekwa-testbench.info/other-tests/ekwa-theme/",
+    "scope": "/"
+}
