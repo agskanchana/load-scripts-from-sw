@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "create-block/ekwa-yoast-faq",
+  "version": "0.1.0",
+  "title": "Ekwa Yoast Faq",
+  "category": "widgets",
+  "description": "Container for Yoast FAQ Block",
+  "attributes": {
+    "enableCollapse": {
+      "type": "boolean",
+      "default": false
+    },
+    "titleBGColor": {
+      "type": "string",
+      "default": "#000000"
+    },
+    "titleTextColor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "contentBGcolor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "contentTextColor": {
+      "type": "string",
+      "default": "#000000"
+    }
+  },
+  "supports": {
+    "html": false
+  },
+  "textdomain": "ekwa-yoast-faq",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}
