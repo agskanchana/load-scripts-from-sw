@@ -15,17 +15,17 @@ export default function save( { attributes } ) {
 
 	return (
 		<>
-		<div  className={className}>
+		<div  className={faqClass}>
 		<InnerBlocks.Content />
 
 		</div>
 
 		<style>
 		{
-          `.${uniqBlockClass+'.'+faqClass} .schema-faq-section {
+          `.${faqClass} .schema-faq-section {
 			margin-bottom: 15px;
 		}
-		.${uniqBlockClass+'.'+faqClass} .schema-faq-section .schema-faq-question {
+		.${faqClass} .schema-faq-section .schema-faq-question {
 			color: ${titleTextColor};
 			display: block;
 			cursor: pointer;
@@ -34,10 +34,10 @@ export default function save( { attributes } ) {
 			background: ${titleBGColor};
 			font-weight: normal;
 		}
-		.${uniqBlockClass+'.'+faqClass} .schema-faq-section.active .schema-faq-question:before {
+		.${faqClass} .schema-faq-section.active .schema-faq-question:before {
 			content: "\f106";
 		}
-		.${uniqBlockClass+'.'+faqClass}  .schema-faq-section .schema-faq-question:before {
+		.${faqClass}  .schema-faq-section .schema-faq-question:before {
 			float: right;
 			line-height: 1;
 			font-size: 21px;
@@ -45,19 +45,19 @@ export default function save( { attributes } ) {
 			font-weight: 600;
 			font-family: "Font Awesome 5 Free";
 		}
-		.${uniqBlockClass+'.'+faqClass}  .schema-faq-section .schema-faq-question:after {
+		.${faqClass}  .schema-faq-section .schema-faq-question:after {
 			clear: both;
 			content: '';
 			display: block;
 		}
-		.${uniqBlockClass+'.'+faqClass}  .schema-faq-section .schema-faq-answer {
+		.${faqClass}  .schema-faq-section .schema-faq-answer {
 			padding: 25px;
 			display: none;
 			margin-bottom: 0;
 			background: ${contentBGcolor};
 			color: ${contentTextColor};
 		}
-		.${uniqBlockClass+'.'+faqClass}  .schema-faq-section.active .schema-faq-answer {
+		.${faqClass}  .schema-faq-section.active .schema-faq-answer {
 			display: block;
 		}
             `

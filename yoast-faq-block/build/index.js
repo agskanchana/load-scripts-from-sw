@@ -115,11 +115,11 @@ function save({
   }
   let className = blockProps.className + ' ' + uniqBlockClass + ' ' + faqClass;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: className
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("style", null, `.${uniqBlockClass + '.' + faqClass} .schema-faq-section {
+    className: faqClass
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("style", null, `.${faqClass} .schema-faq-section {
 			margin-bottom: 15px;
 		}
-		.${uniqBlockClass + '.' + faqClass} .schema-faq-section .schema-faq-question {
+		.${faqClass} .schema-faq-section .schema-faq-question {
 			color: ${titleTextColor};
 			display: block;
 			cursor: pointer;
@@ -128,10 +128,10 @@ function save({
 			background: ${titleBGColor};
 			font-weight: normal;
 		}
-		.${uniqBlockClass + '.' + faqClass} .schema-faq-section.active .schema-faq-question:before {
+		.${faqClass} .schema-faq-section.active .schema-faq-question:before {
 			content: "\f106";
 		}
-		.${uniqBlockClass + '.' + faqClass}  .schema-faq-section .schema-faq-question:before {
+		.${faqClass}  .schema-faq-section .schema-faq-question:before {
 			float: right;
 			line-height: 1;
 			font-size: 21px;
@@ -139,19 +139,19 @@ function save({
 			font-weight: 600;
 			font-family: "Font Awesome 5 Free";
 		}
-		.${uniqBlockClass + '.' + faqClass}  .schema-faq-section .schema-faq-question:after {
+		.${faqClass}  .schema-faq-section .schema-faq-question:after {
 			clear: both;
 			content: '';
 			display: block;
 		}
-		.${uniqBlockClass + '.' + faqClass}  .schema-faq-section .schema-faq-answer {
+		.${faqClass}  .schema-faq-section .schema-faq-answer {
 			padding: 25px;
 			display: none;
 			margin-bottom: 0;
 			background: ${contentBGcolor};
 			color: ${contentTextColor};
 		}
-		.${uniqBlockClass + '.' + faqClass}  .schema-faq-section.active .schema-faq-answer {
+		.${faqClass}  .schema-faq-section.active .schema-faq-answer {
 			display: block;
 		}
             `));

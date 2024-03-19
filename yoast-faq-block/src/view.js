@@ -3,8 +3,8 @@ console.log('testing faq block')
 
 // add FAQ active class on loaded
 window.onload = function() {
-	let $elem = document.querySelector('.wp-block-create-block-ekwa-yoast-faq .schema-faq-section:first-child');
-    let $elem2 = document.querySelectorAll('.wp-block-create-block-ekwa-yoast-faq .schema-faq-section:first-child');
+	let $elem = document.querySelector('.ekwa-faq-collapse .schema-faq-section:first-child');
+    let $elem2 = document.querySelectorAll('.ekwa-faq-collapse .schema-faq-section:first-child');
 	console.log($elem2);
     // $elem.classList.add('active');
     // $elem2.forEach();
