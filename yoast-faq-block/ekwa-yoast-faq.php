@@ -5,6 +5,8 @@ function create_block_ekwa_yoast_faq_init() {
 add_action( 'init', 'create_block_ekwa_yoast_faq_init' );
 
 
+if (!function_exists('replace_schema_faq_question_with_h2')) {
+
 //Convert Yoast FAQ question to H2 tag
 function replace_schema_faq_question_with_h2( $content ) {
     // Define the pattern to match
@@ -16,3 +18,4 @@ function replace_schema_faq_question_with_h2( $content ) {
     return $content;
 }
 add_filter( 'the_content', 'replace_schema_faq_question_with_h2' );
+}

@@ -29,9 +29,11 @@ if( !function_exists('carbon_fields_boot_plugin')){
   }
 
 
+
+
   use Carbon_Fields\Container;
   use Carbon_Fields\Field;
-
+  use Carbon_Fields\Block;
 
   add_action( 'carbon_fields_register_fields', 'service_worker_fields' );
   function service_worker_fields() {
@@ -112,6 +114,30 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
 
     ) );
+
+
+
+
+/*
+
+Block::make( __( 'My Shiny Gutenberg Block' ) )
+->add_fields( array(
+    Field::make( 'complex', 'faq_collapes', __( 'FAQ Collapse' ) )
+    ->add_fields( array(
+        Field::make( 'text', 'faq_question', __( 'Question' ) ),
+        Field::make( 'rich_text', 'faq_answer', __( 'Answer' ) ),
+    ) )
+) )
+->set_render_callback( function ( $fields, $attributes, $inner_blocks ) {
+    ?>
+
+
+
+
+    <?php
+} );
+
+*/
 
 
 
@@ -315,7 +341,6 @@ function print_tracking_codes(){
 
 
 include('yoast-faq-block/ekwa-yoast-faq.php');
-
 
 
 
