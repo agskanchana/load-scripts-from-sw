@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.1.0
+Version: 1.1.5
 
 */
 
@@ -120,6 +120,115 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
 
 
+Block::make( __( 'Ekwa FAQ Collapse' ) )
+
+->add_fields( array(
+
+    Field::make( 'complex', 'faq_collapes', __( 'FAQ Collapse' ) )
+    ->add_fields( array(
+        Field::make( 'text', 'faq_question', __( 'Question' ) ),
+        Field::make( 'rich_text', 'faq_answer', __( 'Answer' ) ),
+    ) ),
+
+    Field::make( 'color', 'ekwa_faq_title_bg', __( 'Title Background ' ) )
+    ->set_default_value('#000000'),
+    Field::make( 'color', 'ekwa_faq_title_color', __( 'Title Text color ' ) )
+    ->set_default_value('#ffffff'),
+    Field::make( 'color', 'ekwa_faq_content_bg', __( 'Content Background ' ) )
+    ->set_default_value('#ffffff'),
+    Field::make( 'color', 'ekwa_faq_content_text', __( 'Content Text color ' ) )
+    ->set_default_value('#000000')
+
+) )
+->set_mode( 'edit' )
+->set_render_callback( function ( $fields, $attributes, $inner_blocks, $post_id ) {
+
+if($fields['faq_collapes']):
+ $uniq_id = 'ekwa-'.uniqid().'-collapse';
+ $uniq_id_qs = 'faq_'.uniqid().'_question';
+?>
+<?php //var_dump($post_id);?>
+<div class="ekwa-faq-block" id="<?php echo $uniq_id;?>">
+    <?php foreach($fields['faq_collapes'] as $key => $faq_item ):?>
+    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" id="ekwa-faq-<?php echo uniqid();?>-item" class="ekwa-faq-item <?php if($key == 0){echo 'active';}?>">
+        <h2  itemprop="name" id="<?php echo $uniq_id_qs;?>" class="ekwa-faq-question"><?php  echo $faq_item['faq_question'];?></h2>
+        <div class="ekwa-faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text">
+                <?php echo $faq_item['faq_answer'];?>
+            </div>
+        </div>
+    </div>
+    <?php endforeach;?>
+</div>
+
+<style>
+    #<?php echo $uniq_id;?> .ekwa-faq-item {
+	background: <?php if($fields['ekwa_faq_content_bg']){echo $fields['ekwa_faq_content_bg'];}else{echo '#fff';}?>;
+	margin-bottom: 15px;
+    color: <?php if($fields['ekwa_faq_content_text']){echo $fields['ekwa_faq_content_text'];}else{echo '#000';}?>;
+}
+#<?php echo $uniq_id;?> .ekwa-faq-question {
+	color: <?php if($fields['ekwa_faq_title_color']){echo $fields['ekwa_faq_title_color'];}else{echo '#ffffff';}?>;
+	display: block;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 15px 20px;
+	background: <?php if($fields['ekwa_faq_title_bg']){echo $fields['ekwa_faq_title_bg'];}else{echo '#000';}?>;
+	font-weight: normal;
+}
+#<?php echo $uniq_id;?> .ekwa-faq-item.active .ekwa-faq-question:before {
+	content: "\f106";
+}
+#<?php echo $uniq_id;?> .ekwa-faq-item .ekwa-faq-question:before {
+	float: right;
+	line-height: 1;
+	font-size: 21px;
+	content: "\f107";
+	font-weight: 600;
+	font-family: "Font Awesome 5 Free";
+}
+#<?php echo $uniq_id;?> .ekwa-faq-item  .ekwa-faq-question:after {
+	clear: both;
+	content: '';
+	display: block;
+}
+#<?php echo $uniq_id;?> .ekwa-faq-answer {
+	padding: 25px;
+	display: none;
+	margin-bottom: 0;
+}
+#<?php echo $uniq_id;?> .ekwa-faq-item.active .ekwa-faq-answer {
+	display: block;
+}
+</style>
+<script>
+
+let htmlAttribute = document.querySelector('html');
+console.log(htmlAttribute);
+ htmlAttribute.setAttribute("itemscope", " ");
+htmlAttribute.setAttribute("itemtype", "https://schema.org/FAQPage");
+// add FAQ active class on click
+let $clickFaq = document.getElementsByClassName('ekwa-faq-question');
+
+for (let i = 0; i < $clickFaq.length; i++) {
+	$clickFaq[i].addEventListener('click', function(e) {
+		var $items = document.querySelectorAll('.ekwa-faq-item');
+		[].forEach.call($items, function(el) {
+			el.classList.remove('active');
+		});
+
+		let $elem = this.closest('.ekwa-faq-item');
+		let $elemId = $elem.getAttribute('id');
+		let $item = document.getElementById($elemId);
+		$item.classList.add('active');
+	});
+}
+</script>
+
+    <?php
+
+    endif;
+} );
 
 
 
