@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.1.5
+Version: 1.1.7
 
 */
 
@@ -124,6 +124,10 @@ Block::make( __( 'Ekwa FAQ Collapse' ) )
 
 ->add_fields( array(
 
+    Field::make( 'checkbox', 'enable_collapse', __( 'Enable Collapse' ) )
+    ->set_option_value( 'yes' )
+    ->set_default_value(true),
+
     Field::make( 'complex', 'faq_collapes', __( 'FAQ Collapse' ) )
     ->add_fields( array(
         Field::make( 'text', 'faq_question', __( 'Question' ) ),
@@ -160,7 +164,7 @@ if($fields['faq_collapes']):
     </div>
     <?php endforeach;?>
 </div>
-
+<?php if($fields['enable_collapse']):?>
 <style>
     #<?php echo $uniq_id;?> .ekwa-faq-item {
 	background: <?php if($fields['ekwa_faq_content_bg']){echo $fields['ekwa_faq_content_bg'];}else{echo '#fff';}?>;
@@ -201,12 +205,14 @@ if($fields['faq_collapes']):
 	display: block;
 }
 </style>
+<?php endif;?>
 <script>
 
 let htmlAttribute = document.querySelector('html');
 console.log(htmlAttribute);
  htmlAttribute.setAttribute("itemscope", " ");
 htmlAttribute.setAttribute("itemtype", "https://schema.org/FAQPage");
+<?php if($fields['enable_collapse']):?>
 // add FAQ active class on click
 let $clickFaq = document.getElementsByClassName('ekwa-faq-question');
 
@@ -223,6 +229,7 @@ for (let i = 0; i < $clickFaq.length; i++) {
 		$item.classList.add('active');
 	});
 }
+<?php endif;?>
 </script>
 
     <?php
