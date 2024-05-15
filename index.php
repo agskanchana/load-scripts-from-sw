@@ -208,12 +208,19 @@ if($fields['faq_collapes']):
 <?php endif;?>
 <script>
 
-let htmlAttribute = document.querySelector('html');
-console.log(htmlAttribute);
+var htmlAttribute = document.querySelector('html');
+// console.log(htmlAttribute);
  htmlAttribute.setAttribute("itemscope", " ");
 htmlAttribute.setAttribute("itemtype", "https://schema.org/FAQPage");
+
 <?php if($fields['enable_collapse']):?>
 // add FAQ active class on click
+
+
+
+
+
+/*
 let $clickFaq = document.getElementsByClassName('ekwa-faq-question');
 
 for (let i = 0; i < $clickFaq.length; i++) {
@@ -229,6 +236,8 @@ for (let i = 0; i < $clickFaq.length; i++) {
 		$item.classList.add('active');
 	});
 }
+*/
+
 <?php endif;?>
 </script>
 
@@ -442,5 +451,41 @@ function print_tracking_codes(){
 
 include('yoast-faq-block/ekwa-yoast-faq.php');
 
+function faq_init() {
+    ?>
+    <script>
+let $clickFaq = document.getElementsByClassName('ekwa-faq-block');
+
+if($clickFaq.length > 0){
 
 
+    Array.prototype.forEach.call($clickFaq , function(el) {
+    // Write your code here
+     let FaqItemID =  el.getAttribute("id");
+      FaqItemID = document.getElementById(FaqItemID);
+
+     let faqQuestions =  FaqItemID.querySelectorAll('.ekwa-faq-question');
+
+
+for (let i = 0; i < faqQuestions.length; i++) {
+	faqQuestions[i].addEventListener('click', function(e) {
+		var $items = FaqItemID.querySelectorAll('.ekwa-faq-item');
+		[].forEach.call($items, function(el) {
+			el.classList.remove('active');
+		});
+
+		let $elem = this.closest('.ekwa-faq-item');
+		let $elemId = $elem.getAttribute('id');
+		let $item = document.getElementById($elemId);
+		$item.classList.add('active');
+	});
+}
+
+
+})
+
+
+}
+    </script>
+    <?php }
+    add_action('wp_footer', 'faq_init');
