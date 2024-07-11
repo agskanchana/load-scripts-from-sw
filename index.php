@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.2.3
+Version: 1.2.4
 
 */
 
@@ -123,12 +123,11 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
 
     Block::make( __( 'Business name' ) )
-
+    ->set_mode( 'both' )
 	->set_render_callback( function ( $fields, $attributes, $inner_blocks ) {
 		?>
 
 		<div class="ekwa-business-name-block">
-            <h1>test</h1>
         <?php echo get_theme_mod('practise_name', '');?>
 		</div><!-- /.block -->
 
