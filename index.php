@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.1.8
+Version: 1.1.9
 
 */
 
@@ -111,6 +111,11 @@ if( !function_exists('carbon_fields_boot_plugin')){
         ->set_value_type( 'url' ),
         Field::make( 'image', 'icon_144', __( 'Icon  Size: 144px' ) )
             ->set_value_type( 'url' ),
+
+
+    ) )
+    ->add_tab( __( 'EAT Bio' ), array(
+        Field::make( 'text', 'fb_nfgfgo_script', __( 'No script Image Source' ) ),
 
 
     ) );
@@ -489,3 +494,40 @@ for (let i = 0; i < faqQuestions.length; i++) {
     </script>
     <?php }
     add_action('wp_footer', 'faq_init');
+
+
+/* eat bio post type */
+    function eat_bios_post_type(){
+        $labels = array(
+                'name' => 'EAT Bios',
+                'singular_name' => 'EAT Bio',
+                'add_new' => 'Add New Item'
+        );
+
+        $args = array(
+                            'labels' => $labels,
+                            'supports'              => array('editor', 'thumbnail', ),
+                            'hierarchical'          => false,
+                            'public'                => false,
+                            'show_ui'               => true,
+                            'show_in_menu'          => true,
+                            'menu_position'         => 5,
+                            'menu_icon'             => 'dashicons-id-alt',
+                            'show_in_admin_bar'     => true,
+                            'show_in_rest'          => true,
+                            'show_in_nav_menus'     => false,
+                            'can_export'            => true,
+                            'has_archive'           => false,
+                            'exclude_from_search'   => true,
+                            'publicly_queryable'    => false,
+                            'query_var'                        => false,
+                            'capability_type'       => 'post'
+
+
+        );
+        register_post_type( 'eat_bios', $args );
+}
+
+add_action( 'init', 'eat_bios_post_type');
+
+
