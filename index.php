@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.2.0
+Version: 1.2.1
 
 */
 
@@ -122,7 +122,7 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
 
 
-    Block::make( __( 'My Shiny Gutenberg Block' ) )
+    Block::make( __( 'Business name' ) )
 
 	->set_render_callback( function ( $fields, $attributes, $inner_blocks ) {
 		?>
