@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.2.4
+Version: 1.2.5
 
 */
 
@@ -517,7 +517,7 @@ for (let i = 0; i < faqQuestions.length; i++) {
 
         $args = array(
                             'labels' => $labels,
-                            'supports'              => array('editor', 'thumbnail', ),
+                            'supports'              => array('editor', 'title', ),
                             'hierarchical'          => false,
                             'public'                => false,
                             'show_ui'               => true,
@@ -541,5 +541,16 @@ for (let i = 0; i < faqQuestions.length; i++) {
 
 add_action( 'init', 'eat_bios_post_type');
 
+/*
+function add_eat_bio ($content) {
+    if (is_single()) {
+        $eat_bio_content = get_post(get_post(242));
+        $eat_bio_content = $eat_bio_content->post_content;
 
 
+    }
+    return $content;
+}
+
+add_filter ('the_content', 'add_eat_bio');
+*/
