@@ -35,6 +35,9 @@ if( !function_exists('carbon_fields_boot_plugin')){
   use Carbon_Fields\Field;
   use Carbon_Fields\Block;
 
+
+
+
   add_action( 'carbon_fields_register_fields', 'service_worker_fields' );
   function service_worker_fields() {
 
@@ -45,9 +48,10 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
         Field::make( 'select', 'method', __( 'Method' ) )
         ->set_options( array(
+            'General' => 'General',
             'Service Worker' => 'Service Worker',
             'Mouse moment' => 'Mouse moment',
-            'General' => 'General',
+
         ) ),
         Field::make( 'checkbox', 'ga_show_custom', 'Custom' ),
 
@@ -115,7 +119,8 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
     ) )
     ->add_tab( __( 'EAT Bio' ), array(
-        Field::make( 'text', 'fb_nfgfgo_script', __( 'No script Image Source' ) ),
+        Field::make( 'checkbox', 'enable_eat_bio', __( 'Enable EAT Bio' ) )
+            ->set_option_value( 'yes' )
 
 
     ) );
@@ -134,6 +139,14 @@ if( !function_exists('carbon_fields_boot_plugin')){
 		<?php
 	} );
 
+
+
+    Container::make( 'post_meta', 'EAT Bio' )
+    ->where( 'post_type', '=', 'page' )
+    ->add_fields( array(
+        Field::make( 'checkbox', 'add_eat_bio', __( 'Add EAT Bio' ) )
+        ->set_option_value( 'yes' )
+    ));
 
 
 Block::make( __( 'Ekwa FAQ Collapse' ) )
@@ -541,16 +554,104 @@ for (let i = 0; i < faqQuestions.length; i++) {
 
 add_action( 'init', 'eat_bios_post_type');
 
+
+
+/*  remove add new if there's a  post of eat bio */
+
 /*
+add_action( 'admin_menu', 'eat_bio_adjust_the_wp_menu', 999 );
+function eat_bio_adjust_the_wp_menu() {
+  //Get user id
+  $current_user = wp_get_current_user();
+  $user_id = $current_user->ID;
+
+  //Get number of posts authored by user
+  $args = array('post_type' =>'eat_bios','author'=>$user_id,'fields'>'ids');
+  $count = count(get_posts($args));
+
+  //Conditionally remove link:
+  if($count>1)
+      {
+        $page = remove_submenu_page( 'edit.php?post_type=eat_bios', 'post-new.php?post_type=eat_bios' );
+      }
+}
+*/
+
+add_action( 'admin_init', function () {
+    remove_submenu_page('edit.php?post_type=eat_bios', 'post-new.php?post_type=eat_bios');
+
+});
+
+
 function add_eat_bio ($content) {
-    if (is_single()) {
-        $eat_bio_content = get_post(get_post(242));
-        $eat_bio_content = $eat_bio_content->post_content;
 
+    $args = array(
+        'post_type' => 'eat_bios',
+        'posts_per_page' => -1,
+        'fields' => 'ids',
+    );
 
-    }
-    return $content;
+     $eat_bios_post_id = get_posts($args)[0];
+     if($eat_bios_post_id > 0){
+        if(carbon_get_theme_option('enable_eat_bio')){
+            if(is_single()){
+                $content .= get_post_field('post_content', $eat_bios_post_id);
+            }
+            if(is_page() && carbon_get_the_post_meta('add_eat_bio')){
+                $content .= get_post_field('post_content', $eat_bios_post_id);
+            }
+        }
+      }
+     return $content;
+
 }
 
+
+
+
 add_filter ('the_content', 'add_eat_bio');
-*/
+
+
+
+/**
+ * Limit publishing of custom post type to one post.
+ */
+function limit_custom_post_type_publishing($post_id, $post) {
+    // Replace 'your_custom_post_type' with your actual custom post type slug.
+    $post_type = 'eat_bios';
+
+    // Check if the post being published is of the specified custom post type.
+    if ($post->post_type == $post_type && $post->post_status == 'publish') {
+        // Count existing published posts of this custom post type.
+        $existing_count = new WP_Query(array(
+            'post_type' => $post_type,
+            'post_status' => 'publish',
+            'posts_per_page' => 1,
+        ));
+
+        // If there is already one published post, prevent publishing another.
+        if ($existing_count->found_posts > 1) {
+            // Set the new post status to draft.
+            wp_update_post(array(
+                'ID' => $post_id,
+                'post_status' => 'trash',
+            ));
+
+            // Optionally display an admin notice.
+            add_action('admin_notices', function () {
+                ?>
+                <div class="notice notice-error is-dismissible">
+                    <p><?php _e('Only one post of this type can be published at a time.', 'text-domain'); ?></p>
+                </div>
+                <?php
+            });
+        }
+    }
+}
+add_action('save_post', 'limit_custom_post_type_publishing', 10, 2);
+
+
+
+
+
+
