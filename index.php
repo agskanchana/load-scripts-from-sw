@@ -594,12 +594,18 @@ function add_eat_bio ($content) {
      $eat_bios_post_id = get_posts($args)[0];
      if($eat_bios_post_id > 0){
         if(carbon_get_theme_option('enable_eat_bio')){
-            if(is_single()){
-                $content .= get_post_field('post_content', $eat_bios_post_id);
+            if ( ! in_array( get_post()->post_type, [ 'ekwa_theme_footers', 'ekwa_theme_headers' ] ) ){
+
+                if(is_single()){
+                    $content .= get_post_field('post_content', $eat_bios_post_id);
+                }
+                if(is_page() && carbon_get_the_post_meta('add_eat_bio')){
+                    $content .= get_post_field('post_content', $eat_bios_post_id);
+                }
+
             }
-            if(is_page() && carbon_get_the_post_meta('add_eat_bio')){
-                $content .= get_post_field('post_content', $eat_bios_post_id);
-            }
+
+
         }
       }
      return $content;
