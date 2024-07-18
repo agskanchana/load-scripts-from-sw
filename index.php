@@ -583,7 +583,8 @@ add_action( 'admin_init', function () {
 });
 
 
-function add_eat_bio ($content) {
+
+function execute_on_get_footer_event(){
 
     $args = array(
         'post_type' => 'eat_bios',
@@ -594,32 +595,19 @@ function add_eat_bio ($content) {
      $eat_bios_post_id = get_posts($args)[0];
      if($eat_bios_post_id > 0){
         if(carbon_get_theme_option('enable_eat_bio')){
+            if(is_single()){
+                echo get_post_field('post_content', $eat_bios_post_id);
+            }
+            if(is_page() && carbon_get_the_post_meta('add_eat_bio')){
+                echo  get_post_field('post_content', $eat_bios_post_id);
 
-
-                if(is_single()){
-                    if(get_post_type(get_the_ID()) == 'page' || get_post_type(get_the_ID()) == 'post'){
-                    $content .= get_post_field('post_content', $eat_bios_post_id);
-                    }
-                }
-                if(is_page() && carbon_get_the_post_meta('add_eat_bio')){
-                    if(get_post_type(get_the_ID()) == 'page' || get_post_type(get_the_ID()) == 'post'){
-                    $content .= get_post_field('post_content', $eat_bios_post_id);
-                    }
-                }
-
-
-
-
+            }
         }
-      }
-     return $content;
+    }
 
 }
-
-
-
-
-add_filter ('the_content', 'add_eat_bio');
+// add the action
+add_action( "get_footer", "execute_on_get_footer_event" , 10, 2);
 
 
 
