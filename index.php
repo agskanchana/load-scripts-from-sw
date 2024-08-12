@@ -40,7 +40,7 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
   add_action( 'carbon_fields_register_fields', 'service_worker_fields' );
   function service_worker_fields() {
-
+    $code = '<?php show_eat_bio();?>';
     Container::make( 'theme_options', __( 'Ekwa Settings' ) )
     ->set_icon( 'https://www.ekwa-testbench.info/logo-1.png' )
     ->add_tab( __( 'Google analytic' ), array(
@@ -120,7 +120,24 @@ if( !function_exists('carbon_fields_boot_plugin')){
     ) )
     ->add_tab( __( 'EAT Bio' ), array(
         Field::make( 'checkbox', 'enable_eat_bio', __( 'Enable EAT Bio' ) )
-            ->set_option_value( 'yes' )
+            ->set_option_value( 'yes' ),
+        Field::make( 'checkbox', 'disable_on_articles', __( 'Disable on articles' ) )
+            ->set_option_value( 'yes' ),
+        Field::make( 'html', 'crb_information_text' )
+
+            ->set_html( '<h2>Use following function where u want the EAT Bio to show</h2><p>'.'<pre>' . htmlspecialchars($code) . '</pre></p>' )
+            ->set_conditional_logic( array(
+                array(
+                    'field' => 'disable_on_articles',
+                    'value' => true,
+                )
+        ) )
+
+
+
+
+
+
 
 
     ) );
@@ -596,7 +613,9 @@ function execute_on_get_footer_event(){
      if($eat_bios_post_id > 0){
         if(carbon_get_theme_option('enable_eat_bio')){
             if(is_single()){
-                echo  apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
+                if(!carbon_get_theme_option('disable_on_articles')){
+                    echo  apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
+                }
             }
             if(is_page() && carbon_get_the_post_meta('add_eat_bio')){
                 echo  apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
@@ -609,6 +628,22 @@ function execute_on_get_footer_event(){
 // add the action
 add_action( "get_footer", "execute_on_get_footer_event" , 10, 2);
 
+
+function show_eat_bio(){
+    $args = array(
+        'post_type' => 'eat_bios',
+        'posts_per_page' => -1,
+        'fields' => 'ids',
+    );
+
+     $eat_bios_post_id = get_posts($args)[0];
+    if(carbon_get_theme_option('enable_eat_bio')){
+        if($eat_bios_post_id > 0){
+            echo  apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
+        }
+
+    }
+}
 
 
 /**
