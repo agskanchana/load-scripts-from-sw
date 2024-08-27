@@ -600,6 +600,21 @@ add_action( 'admin_init', function () {
 });
 
 
+function lazyload_images($content){
+	//-- Change src to data attributes.
+	$content = preg_replace("/<img(.*?)(src=)(.*?)>/i", '<img$1data-$2$3>', $content);
+    	//-- Change srcset to data attributes.
+    	$content = preg_replace("/<img(.*?)(srcset=)(.*?)>/i", '<img$1data-$2$3>', $content);
+	//-- Add .lazy-load class to each image that already has a class.
+	$content = preg_replace('/<img(.*?)class=\"(.*?)\"(.*?)>/i', '<img$1class="$2 lazyload"$3>', $content);
+
+	//-- Add .lazy-load class to each image that doesn't already have a class.
+	$content = preg_replace('/<img((.(?!class=))*)\/?>/i', '<img class="lazyload"$1>', $content);
+	return  $content;
+}
+
+
+
 
 function execute_on_get_footer_event(){
 
@@ -614,11 +629,13 @@ function execute_on_get_footer_event(){
         if(carbon_get_theme_option('enable_eat_bio')){
             if(is_single()){
                 if(!carbon_get_theme_option('disable_on_articles')){
-                    echo  apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
+                    $output =   apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
+                    echo lazyload_images($output);
                 }
             }
             if(is_page() && carbon_get_the_post_meta('add_eat_bio')){
-                echo  apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
+                $output =   apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
+                echo lazyload_images($output);
 
             }
         }
@@ -639,7 +656,8 @@ function show_eat_bio(){
      $eat_bios_post_id = get_posts($args)[0];
     if(carbon_get_theme_option('enable_eat_bio')){
         if($eat_bios_post_id > 0){
-            echo  apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
+            $output =   apply_filters( 'the_content', get_post_field('post_content', $eat_bios_post_id));
+            echo lazyload_images($output);
         }
 
     }
