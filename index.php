@@ -131,13 +131,58 @@ if( !function_exists('carbon_fields_boot_plugin')){
                     'field' => 'disable_on_articles',
                     'value' => true,
                 )
-        ) )
+        ) ),
+        Field::make( 'checkbox', 'enable_eat_bio_schema', __( 'Enable Schema' ) )
+            ->set_option_value( 'yes' ),
 
-
-
-
-
-
+            Field::make( 'select', 'honorific_prefix', __( 'HonorificPrefix' ) )
+            ->add_options( array(
+                'Dr' => __( 'Dr.' ),
+                'Mrs' => __( 'Mrs.' ),
+                'Mr' => __( 'Mr.' ),
+            ) )
+            ->set_conditional_logic( array(
+                array(
+                    'field' => 'enable_eat_bio_schema',
+                    'value' => true,
+                )
+        ) ),
+        Field::make( 'text', 'eat_bio_name', __( 'Client name' ) )
+        ->set_default_value( get_theme_mod('client_name') )
+        ->set_conditional_logic( array(
+            array(
+                'field' => 'enable_eat_bio_schema',
+                'value' => true,
+            )
+    ) ),
+    Field::make( 'text', 'eat_bio_job_title', __( 'Job Title' ) )
+    ->set_conditional_logic( array(
+        array(
+            'field' => 'enable_eat_bio_schema',
+            'value' => true,
+        )
+    ) ),
+    Field::make( 'image', 'eat_bio_image', __( 'Image' ) )
+    ->set_value_type( 'url' )
+    ->set_conditional_logic( array(
+        array(
+            'field' => 'enable_eat_bio_schema',
+            'value' => true,
+        )
+    ) ),
+    Field::make( 'select', 'organization_type', __( 'Organization type' ) )
+            ->add_options( array(
+                'MedicalOrganization' => __( 'MedicalOrganization' ),
+                'OnlineBusiness' => __( 'OnlineBusiness' ),
+                'LocalBusiness' => __( 'LocalBusiness' ),
+                'Corporation' => __( 'Corporation' ),
+            ) )
+            ->set_conditional_logic( array(
+                array(
+                    'field' => 'enable_eat_bio_schema',
+                    'value' => true,
+                )
+        ) ),
 
 
     ) );
@@ -701,6 +746,38 @@ function limit_custom_post_type_publishing($post_id, $post) {
 }
 add_action('save_post', 'limit_custom_post_type_publishing', 10, 2);
 
+
+function add_eat_bio_schema() {
+    if(carbon_get_theme_option('enable_eat_bio_schema')):
+    ?>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Person",
+  "honorificPrefix": "<?php echo carbon_get_theme_option('honorific_prefix');?>.",
+  "name": "<?php echo carbon_get_theme_option('eat_bio_name');?>",
+  "jobTitle": "<?php echo carbon_get_theme_option('eat_bio_job_title');?>",
+  "url": "<?php echo get_page_link(get_theme_mod('author_page', ''));?>",
+  "image": "<?php echo carbon_get_theme_option('eat_bio_image');?>",
+  "worksFor":{
+    "@type": "<?php echo carbon_get_theme_option('organization_type');?>",
+    "name": "<?php echo get_theme_mod('organization_type', '');?>"
+  },
+  "address" : {
+    "@type" : "PostalAddress",
+    "streetAddress" : "<?php echo get_location('street_address', 1);?>",
+    "addressLocality" : "<?php echo get_location('city', 1);?>",
+    "addressRegion" : "<?php echo get_location('state', 1);?>",
+    "postalCode" : "<?php echo get_location('zip', 1);?>",
+    "addressCountry": "<?php echo get_theme_mod('country', '');?>"
+  }
+
+}
+</script>
+    <?php
+    endif;
+}
+add_action( 'wp_head', 'add_eat_bio_schema' );
 
 
 
