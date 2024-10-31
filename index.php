@@ -241,9 +241,16 @@ Block::make( __( 'Ekwa FAQ Collapse' ) )
 if($fields['faq_collapes']):
  $uniq_id = 'ekwa-'.uniqid().'-collapse';
  $uniq_id_qs = 'faq_'.uniqid().'_question';
+
+ $additional_class  = '';
+
+ if(isset($attributes['className'])){
+    $additional_class = $attributes['className'];
+ }
+
 ?>
 <?php //var_dump($post_id);?>
-<div class="ekwa-faq-block" id="<?php echo $uniq_id;?>">
+<div class="ekwa-faq-block <?php echo $additional_class;?>" id="<?php echo $uniq_id;?>">
     <?php foreach($fields['faq_collapes'] as $key => $faq_item ):?>
     <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" id="ekwa-faq-<?php echo uniqid();?>-item" class="ekwa-faq-item <?php if($key == 0){echo 'active';}?>">
         <h2  itemprop="name" id="<?php echo $uniq_id_qs;?>" class="ekwa-faq-question"><?php  echo $faq_item['faq_question'];?></h2>
