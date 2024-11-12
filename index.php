@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.3.6
+Version: 1.3.7
 
 */
 
@@ -49,7 +49,6 @@ if( !function_exists('carbon_fields_boot_plugin')){
         Field::make( 'select', 'method', __( 'Method' ) )
         ->set_options( array(
             'General' => 'General',
-            'Service Worker' => 'Service Worker',
             'Mouse moment' => 'Mouse moment',
 
         ) ),
