@@ -49,7 +49,7 @@ if( !function_exists('carbon_fields_boot_plugin')){
         Field::make( 'select', 'method', __( 'Method' ) )
         ->set_options( array(
             'General' => 'General',
-            'Mouse moment' => 'Mouse moment',
+
 
         ) ),
         Field::make( 'checkbox', 'ga_show_custom', 'Custom' ),
@@ -765,7 +765,7 @@ add_action( 'wp_head', 'add_eat_bio_schema' );
 
 
 
-
+include('includes/shortcode_generator/index.php');
 
 
 
