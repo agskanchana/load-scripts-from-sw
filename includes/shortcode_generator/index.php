@@ -71,7 +71,7 @@ echo apply_filters('the_content',$shortcode->post_content);
 
 
 
-/*  default post
+/*  default post */
 function create_default_shortcode_post() {
 
     $existing_posts = get_posts(array(
@@ -141,4 +141,4 @@ function create_default_shortcode_post() {
 }
 
 
-add_action('init', 'create_default_shortcode_post');*/
+add_action('init', 'create_default_shortcode_post');
