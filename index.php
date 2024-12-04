@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.5.0
+Version: 1.5.1
 
 */
 
@@ -770,10 +770,19 @@ include('includes/shortcode_generator/index.php');
 
 
 function add_span_to_first_character($content) {
-    // Check if it's a single post and the post type is 'post'
+    // Apply only to 'post' post type
     if (is_single() && get_post_type() === 'post' && in_the_loop() && is_main_query()) {
-        // Wrap the first character in a span tag
-        $content = preg_replace('/^(<p>)?(\s*<[^>]+>)?(\w)/', '$1$2<span class="firstcharacter">$3</span>', $content, 1);
+        // Use regex to wrap the first visible character, skipping any leading tags or spaces
+        $content = preg_replace_callback(
+            '/^(<p>)?(\s*<[^>]+>\s*)*?(\w)/',
+            function ($matches) {
+                return (isset($matches[1]) ? $matches[1] : '') . // Optional <p> tag
+                       (isset($matches[2]) ? $matches[2] : '') . // Leading HTML tags or spaces
+                       '<span class="firstcharacter">' . $matches[3] . '</span>'; // First character wrapped
+            },
+            $content,
+            1
+        );
     }
     return $content;
 }
