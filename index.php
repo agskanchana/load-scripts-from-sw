@@ -769,3 +769,12 @@ include('includes/shortcode_generator/index.php');
 
 
 
+function add_span_to_first_character($content) {
+    // Check if it's a single post and the post type is 'post'
+    if (is_single() && get_post_type() === 'post' && in_the_loop() && is_main_query()) {
+        // Wrap the first character in a span tag
+        $content = preg_replace('/^(<p>)?(\s*<[^>]+>)?(\w)/', '$1$2<span class="firstcharacter">$3</span>', $content, 1);
+    }
+    return $content;
+}
+add_filter('the_content', 'add_span_to_first_character');
