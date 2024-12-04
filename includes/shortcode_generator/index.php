@@ -68,7 +68,7 @@ echo apply_filters('the_content',$shortcode->post_content);
 
 });
 
-/*  default post
+/*  default post */
 
 function create_default_shortcode_posts() {
 
@@ -204,4 +204,3 @@ function create_default_shortcode_posts() {
 }
 
 add_action('init', 'create_default_shortcode_posts');
-*/
