@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.5.1
+Version: 1.5.2
 
 */
 
@@ -90,7 +90,6 @@ if( !function_exists('carbon_fields_boot_plugin')){
         Field::make( 'text', 'fb_no_script', __( 'No script Image Source' ) ),
         Field::make( 'select', 'fb_method', __( 'Method' ) )
         ->set_options( array(
-            'Mouse moment' => 'Mouse moment',
             'General' => 'General',
         ) ),
 
@@ -181,6 +180,14 @@ if( !function_exists('carbon_fields_boot_plugin')){
                     'value' => true,
                 )
         ) ),
+
+
+    ) )
+    ->add_tab( __( 'Related Articles' ), array(
+
+        Field::make( 'checkbox', 'style_first_character', 'Style First Letter' ),
+        Field::make( 'color', 'first_letter_color', __( 'Letter color' ) )
+
 
 
     ) );
@@ -766,24 +773,4 @@ add_action( 'wp_head', 'add_eat_bio_schema' );
 
 
 include('includes/shortcode_generator/index.php');
-
-
-
-function add_span_to_first_character($content) {
-    // Apply only to 'post' post type
-    if (is_single() && get_post_type() === 'post' && in_the_loop() && is_main_query()) {
-        // Use regex to wrap the first visible character, skipping any leading tags or spaces
-        $content = preg_replace_callback(
-            '/^(<p>)?(\s*<[^>]+>\s*)*?(\w)/',
-            function ($matches) {
-                return (isset($matches[1]) ? $matches[1] : '') . // Optional <p> tag
-                       (isset($matches[2]) ? $matches[2] : '') . // Leading HTML tags or spaces
-                       '<span class="firstcharacter">' . $matches[3] . '</span>'; // First character wrapped
-            },
-            $content,
-            1
-        );
-    }
-    return $content;
-}
-add_filter('the_content', 'add_span_to_first_character');
+include('includes/first-character.php');
