@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.5.4
+Version: 1.5.6
 
 */
 
@@ -227,7 +227,10 @@ if( !function_exists('carbon_fields_boot_plugin')){
             </div>
 		</div><!-- /.block -->
         <style>
-
+            .cta-design-one {
+                margin-top: 25px;
+                margin-bottom: 25px;
+            }
            .cta-design-one .cta-block{
                 padding-top: 20px;
                 padding-bottom: 20px;
@@ -314,9 +317,11 @@ if( !function_exists('carbon_fields_boot_plugin')){
                     max-width: 750px;
                     text-align: center;
                     padding: 40px;
+                    margin-top: 25px;
+                    margin-bottom: 25px;
                 }
                 .cta-design-two h2{
-                    margin-top: 0;
+                    margin-top: 0 !important;
                 }
                 <?php if($fields['btn_background'] || $fields['btn_text']):?>
                     #<?php echo $block_id;?>.cta-design-two .btn,
