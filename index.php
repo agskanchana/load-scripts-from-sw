@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.5.9
+Version: 1.6.1
 
 */
 
@@ -208,6 +208,8 @@ if( !function_exists('carbon_fields_boot_plugin')){
         ->set_default_value('#ffffff'),
         Field::make( 'color', 'btn_background', __( 'Button background' ) ),
         Field::make( 'color', 'btn_text', __( 'Button text' ) ),
+        Field::make( 'color', 'btn_background_hover', __( 'Button background Hover' ) ),
+        Field::make( 'color', 'btn_text_hover', __( 'Button text Hover' ) ),
 
 	) )
     ->set_mode( 'preview' )
@@ -250,10 +252,16 @@ if( !function_exists('carbon_fields_boot_plugin')){
                 border-bottom: 2px solid <?php echo $fields['text_color'];?>;
             }
             <?php if($fields['btn_background'] || $fields['btn_text']):?>
-            #<?php echo $block_id;?>.cta-design-one .btn,
-            #<?php echo $block_id;?>.cta-design-one .btn:hover{
+            #<?php echo $block_id;?>.cta-design-one .btn{
                 background: <?php echo $fields['btn_background'];?>;
                 color: <?php echo $fields['btn_text'];?>;
+            }
+            <?php endif;?>
+
+            <?php if($fields['btn_background_hover'] || $fields['btn_text_hover']):?>
+            #<?php echo $block_id;?>.cta-design-one .btn:hover{
+                background: <?php echo $fields['btn_background_hover'];?> !important;
+                color: <?php echo $fields['btn_text_hover'];?> !important;
             }
             <?php endif;?>
             .cta-block-wrapper.cta-design-one{
@@ -289,6 +297,8 @@ if( !function_exists('carbon_fields_boot_plugin')){
         ->set_default_value('#000000'),
         Field::make( 'color', 'btn_background', __( 'Button background' ) ),
         Field::make( 'color', 'btn_text', __( 'Button text' ) ),
+        Field::make( 'color', 'btn_background_hover', __( 'Button background Hover' ) ),
+        Field::make( 'color', 'btn_text_hover', __( 'Button text Hover' ) ),
 
 	) )
     ->set_mode( 'preview' )
@@ -324,12 +334,18 @@ if( !function_exists('carbon_fields_boot_plugin')){
                     margin-top: 0 !important;
                 }
                 <?php if($fields['btn_background'] || $fields['btn_text']):?>
-                    #<?php echo $block_id;?>.cta-design-two .btn,
-                    #<?php echo $block_id;?>.cta-design-two .btn:hover{
+                    #<?php echo $block_id;?>.cta-design-two .btn{
                         background: <?php echo $fields['btn_background'];?>;
                         color: <?php echo $fields['btn_text'];?>;
                     }
                 <?php endif;?>
+
+                <?php if($fields['btn_background_hover'] || $fields['btn_text_hover']):?>
+                #<?php echo $block_id;?>.cta-design-two .btn:hover{
+                    background: <?php echo $fields['btn_background_hover'];?> !important;
+                    color: <?php echo $fields['btn_text_hover'];?> !important;
+                }
+            <?php endif;?>
                 #<?php echo $block_id;?>.cta-design-two .cta-block{
                 color: <?php echo $fields['text_color'];?>;
                 }
