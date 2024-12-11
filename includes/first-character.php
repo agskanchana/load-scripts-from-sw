@@ -2,26 +2,30 @@
 
 function add_span_to_first_character($content) {
     if (carbon_get_theme_option('style_first_character')) {
-        // Check if we are on a single post, using the main query, and not inside a shortcode
+        // Ensure the function is applied only under appropriate conditions
         if (is_single() && get_post_type() === 'post' && in_the_loop() && is_main_query()) {
-            // Temporarily remove shortcodes to avoid affecting their content
-            $shortcode_content = $content;
-            $content = strip_shortcodes($content);
+            // Split content into parts: shortcode and non-shortcode segments
+            $pattern = '/(\[.*?\])/'; // Match shortcodes
+            $segments = preg_split($pattern, $content, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-            // Apply the regex to only non-shortcode content
-            $content = preg_replace_callback(
-                '/^(<p>)?(\s*<[^>]+>\s*)*?(\w)/',
-                function ($matches) {
-                    return (isset($matches[1]) ? $matches[1] : '') .
-                           (isset($matches[2]) ? $matches[2] : '') .
-                           '<span class="firstcharacter">' . $matches[3] . '</span>';
-                },
-                $content,
-                1
-            );
+            // Process only the non-shortcode segments
+            foreach ($segments as &$segment) {
+                if (!preg_match('/^\[.*?\]$/', $segment)) {
+                    $segment = preg_replace_callback(
+                        '/^(<p>)?(\s*<[^>]+>\s*)*?(\w)/',
+                        function ($matches) {
+                            return (isset($matches[1]) ? $matches[1] : '') .
+                                   (isset($matches[2]) ? $matches[2] : '') .
+                                   '<span class="firstcharacter">' . $matches[3] . '</span>';
+                        },
+                        $segment,
+                        1
+                    );
+                }
+            }
 
-            // Restore shortcode content
-            $content = do_shortcode($shortcode_content);
+            // Reassemble the content
+            $content = implode('', $segments);
         }
     }
     return $content;
