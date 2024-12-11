@@ -61,14 +61,42 @@ add_shortcode('cta',function($atts){
    $post_id = $atts['id'];
 
 $shortcode = get_post($post_id);
-echo apply_filters('the_content',$shortcode->post_content);
-
+if($shortcode){
+    echo apply_filters('the_content',$shortcode->post_content);
+}
      return ob_get_clean();
 
 
 });
 
-/*  default post */
+add_action('init', function () {
+    // Define the custom post type name.
+    $post_type = 'shortcode_gen';
+
+    // Query for posts with either '_is_default_shortcode' or '_is_second_default_shortcode'.
+    $posts_to_delete = get_posts([
+        'post_type'   => $post_type,
+        'meta_query'  => [
+            'relation' => 'OR', // Match either of the meta keys.
+            [
+                'key' => '_is_default_shortcode',
+            ],
+            [
+                'key' => '_is_second_default_shortcode',
+            ],
+        ],
+        'numberposts' => -1, // Fetch all matching posts.
+        'fields'      => 'ids', // Retrieve only post IDs for efficiency.
+    ]);
+
+    // Loop through and delete the matching posts.
+    foreach ($posts_to_delete as $post_id) {
+        wp_delete_post($post_id, true); // 'true' ensures permanent deletion.
+    }
+});
+
+
+/*  default post*/
 
 function create_default_shortcode_posts() {
 
@@ -79,7 +107,7 @@ function create_default_shortcode_posts() {
         'posts_per_page' => 1,
         'meta_query' => array(
             array(
-                'key' => '_is_default_shortcode',
+                'key' => '_default_shortcode_one',
                 'value' => '1'
             )
         )
@@ -87,39 +115,7 @@ function create_default_shortcode_posts() {
 
     // If not, create the first default post
     if (empty($first_post_exists)) {
-        $first_post_content = '<!-- wp:group {"className":"blog-cta-block-one","layout":{"type":"constrained"}} -->
-<div class="wp-block-group blog-cta-block-one"><!-- wp:group {"backgroundColor":"black","layout":{"type":"constrained"}} -->
-<div class="wp-block-group has-black-background-color has-background"><!-- wp:spacer {"height":"5px"} -->
-<div style="height:5px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer --></div>
-<!-- /wp:group -->
-
-<!-- wp:spacer {"height":"25px"} -->
-<div style="height:25px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer -->
-
-<!-- wp:group {"layout":{"type":"constrained"}} -->
-<div class="wp-block-group"><!-- wp:heading {"textAlign":"center"} -->
-<h2 class="wp-block-heading has-text-align-center">Call Our Office for More Information</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph {"align":"center","fontSize":"medium"} -->
-<p class="has-text-align-center has-medium-font-size">New Patients:&nbsp;[phone] | &nbsp;Existing Patients:&nbsp;[phone_ex]</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:acf/btn {"name":"acf/btn","data":{"field_624317dd4fc9f":"Request an Appointment","field_624317e24fca0":{"title":"","url":"","target":""},"field_6243180a0d010":"","field_62431dc4b7ef6":"0","field_635e3a8ca0159":"0"},"align":"center","mode":"preview"} /--></div>
-<!-- /wp:group -->
-
-<!-- wp:spacer {"height":"25px"} -->
-<div style="height:25px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer -->
-
-<!-- wp:group {"backgroundColor":"black","layout":{"type":"constrained"}} -->
-<div class="wp-block-group has-black-background-color has-background"><!-- wp:spacer {"height":"5px"} -->
-<div style="height:5px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer --></div>
-<!-- /wp:group --></div>
-<!-- /wp:group -->';
+        $first_post_content = '<!-- wp:carbon-fields/blog-cta-two /-->';
         $first_post = array(
             'post_title'    => 'CTA with New and Existing phone numbers',
             'post_content'  => $first_post_content,
@@ -130,7 +126,7 @@ function create_default_shortcode_posts() {
         $first_post_id = wp_insert_post($first_post);
 
         if ($first_post_id) {
-            add_post_meta($first_post_id, '_is_default_shortcode', '1');
+            add_post_meta($first_post_id, '_default_shortcode_one', '1');
         }
     }
 
@@ -141,7 +137,7 @@ function create_default_shortcode_posts() {
         'posts_per_page' => 1,
         'meta_query' => array(
             array(
-                'key' => '_is_second_default_shortcode',
+                'key' => '_default_shortcode_two',
                 'value' => '1'
             )
         )
@@ -149,47 +145,9 @@ function create_default_shortcode_posts() {
 
     // If not, create the second default post
     if (empty($second_post_exists)) {
-        $second_post_content = '<!-- wp:group {"className":"blog-cta-two","layout":{"type":"constrained","contentSize":"750px"}} -->
-<div class="wp-block-group blog-cta-two"><!-- wp:group {"layout":{"type":"constrained","contentSize":""}} -->
-<div class="wp-block-group"><!-- wp:group {"style":{"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"backgroundColor":"pale-blue","textColor":"white","layout":{"type":"constrained","contentSize":"500px"}} -->
-<div class="wp-block-group has-white-color has-pale-blue-background-color has-text-color has-background has-link-color"><!-- wp:spacer {"height":"25px"} -->
-<div style="height:25px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer -->
-
-<!-- wp:separator {"align":"center","className":"is-style-default","backgroundColor":"white"} -->
-<hr class="wp-block-separator aligncenter has-text-color has-white-color has-alpha-channel-opacity has-white-background-color has-background is-style-default"/>
-<!-- /wp:separator -->
-
-<!-- wp:spacer {"height":"20px"} -->
-<div style="height:20px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer -->
-
-<!-- wp:paragraph {"align":"center","fontSize":"medium"} -->
-<p class="has-text-align-center has-medium-font-size">CALL OUR OFFICE TODAY at <strong>[phone] </strong>OR</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:spacer {"height":"10px"} -->
-<div style="height:10px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer -->
-
-<!-- wp:acf/btn {"name":"acf/btn","data":{"text":"Request an Appointment","_text":"field_624317dd4fc9f","link":"","_link":"field_624317e24fca0","icon":"","_icon":"field_6243180a0d010","phone_number":"0","_phone_number":"field_62431dc4b7ef6","custom_attribute":"0","_custom_attribute":"field_635e3a8ca0159"},"align":"center","mode":"preview"} /-->
-
-<!-- wp:spacer {"height":"20px"} -->
-<div style="height:20px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer -->
-
-<!-- wp:separator {"align":"center","className":"is-style-default","backgroundColor":"white"} -->
-<hr class="wp-block-separator aligncenter has-text-color has-white-color has-alpha-channel-opacity has-white-background-color has-background is-style-default"/>
-<!-- /wp:separator -->
-
-<!-- wp:spacer {"height":"25px"} -->
-<div style="height:25px" aria-hidden="true" class="wp-block-spacer"></div>
-<!-- /wp:spacer --></div>
-<!-- /wp:group --></div>
-<!-- /wp:group --></div>
-<!-- /wp:group -->';
+        $second_post_content = '<!-- wp:carbon-fields/blog-cta /-->';
         $second_post = array(
-            'post_title'    => 'CTA Only with Call tracking Numer',
+            'post_title'    => 'CTA Only with Call tracking Number',
             'post_content'  => $second_post_content,
             'post_status'   => 'publish',
             'post_type'     => 'shortcode_gen'
@@ -198,7 +156,7 @@ function create_default_shortcode_posts() {
         $second_post_id = wp_insert_post($second_post);
 
         if ($second_post_id) {
-            add_post_meta($second_post_id, '_is_second_default_shortcode', '1');
+            add_post_meta($second_post_id, '_default_shortcode_two', '1');
         }
     }
 }

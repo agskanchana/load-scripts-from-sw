@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.5.3
+Version: 1.5.4
 
 */
 
@@ -192,6 +192,154 @@ if( !function_exists('carbon_fields_boot_plugin')){
 
     ) );
 
+
+
+    Block::make( __( 'Blog CTA' ) )
+	->add_fields( array(
+
+
+		Field::make( 'rich_text', 'content', __( 'Block Content' ) )
+        ->set_default_value('CALL OUR OFFICE TODAY at [phone] OR'),
+        Field::make( 'color', 'background_color', __( 'Background Color' ) )
+        ->set_default_value('#4A74B4'),
+        Field::make( 'color', 'border_color', __( 'Border Color' ) )
+        ->set_default_value('#ffffff'),
+        Field::make( 'color', 'text_color', __( 'Text Color' ) )
+        ->set_default_value('#ffffff'),
+        Field::make( 'color', 'btn_background', __( 'Button background' ) ),
+        Field::make( 'color', 'btn_text', __( 'Button text' ) ),
+
+	) )
+    ->set_mode( 'preview' )
+	->set_render_callback( function ( $fields, $attributes, $inner_blocks ) {
+     $block_id = 'block_' . uniqid();
+
+
+
+		?>
+
+		<div id="<?php echo $block_id;?>" class="cta-block-wrapper cta-design-one" style="background: <?php echo $fields['background_color'];?>;">
+            <div class="cta-block">
+                <div class="cta-content">
+                <?php echo  $fields['content']; ?>
+                </div>
+                <a class="btn" href="<?php echo get_permalink(get_theme_mod('appointment_page', ''));?>">Request an Appointment</a>
+            </div>
+		</div><!-- /.block -->
+        <style>
+
+           .cta-design-one .cta-block{
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+            #<?php echo $block_id;?>.cta-design-one .cta-block{
+                border-top: 2px solid <?php echo $fields['border_color'];?>;
+                border-bottom: 2px solid <?php echo $fields['border_color'];?>;
+            }
+            #<?php echo $block_id;?>.cta-design-one .cta-block{
+                color: <?php echo $fields['text_color'];?>;
+            }
+            #<?php echo $block_id;?>.cta-design-one .cta-content a{
+                color: <?php echo $fields['text_color'];?>;
+                text-decoration: underline;
+                font-weight: bold;
+                text-decoration: none;
+                border-bottom: 2px solid <?php echo $fields['text_color'];?>;
+            }
+            <?php if($fields['btn_background'] || $fields['btn_text']):?>
+            #<?php echo $block_id;?>.cta-design-one .btn,
+            #<?php echo $block_id;?>.cta-design-one .btn:hover{
+                background: <?php echo $fields['btn_background'];?>;
+                color: <?php echo $fields['btn_text'];?>;
+            }
+            <?php endif;?>
+            .cta-block-wrapper.cta-design-one{
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 750px;
+                text-align: center;
+                padding: 40px;
+            }
+            .cta-design-one  .cta-content{
+                margin-bottom: 15px;
+            }
+
+
+        </style>
+		<?php
+	} );
+
+
+
+
+    Block::make( __( 'Blog CTA Two' ) )
+	->add_fields( array(
+
+
+		Field::make( 'rich_text', 'content', __( 'Block Content' ) )
+        ->set_default_value('<h2>Call Our Office for More Information</h2><p>New Patients: [phone] |  Existing Patients: [phone_ex]</p>'),
+        Field::make( 'color', 'background_color', __( 'Background Color' ) )
+        ->set_default_value('#ffffff'),
+        Field::make( 'color', 'border_color', __( 'Border Color' ) )
+        ->set_default_value('#000000'),
+        Field::make( 'color', 'text_color', __( 'Text Color' ) )
+        ->set_default_value('#000000'),
+        Field::make( 'color', 'btn_background', __( 'Button background' ) ),
+        Field::make( 'color', 'btn_text', __( 'Button text' ) ),
+
+	) )
+    ->set_mode( 'preview' )
+	->set_render_callback( function ( $fields, $attributes, $inner_blocks ) {
+     $block_id = 'block_' . uniqid();
+
+
+
+		?>
+
+		<div id="<?php echo $block_id;?>" class="cta-block-wrapper cta-design-two" style="background: <?php echo $fields['background_color'];?>;">
+            <div class="cta-block">
+                <div class="cta-content">
+                <?php echo  $fields['content']; ?>
+                </div>
+                <a class="btn" href="<?php echo get_permalink(get_theme_mod('appointment_page', ''));?>">Request an Appointment</a>
+            </div>
+		</div><!-- /.block -->
+        <style>
+
+            .cta-design-two{
+                    border-top: 5px solid <?php echo $fields['border_color'];?>;
+                    border-bottom: 5px solid <?php echo $fields['border_color'];?>;
+                    margin-left: auto;
+                    margin-right: auto;
+                    max-width: 750px;
+                    text-align: center;
+                    padding: 40px;
+                }
+                .cta-design-two h2{
+                    margin-top: 0;
+                }
+                <?php if($fields['btn_background'] || $fields['btn_text']):?>
+                    #<?php echo $block_id;?>.cta-design-two .btn,
+                    #<?php echo $block_id;?>.cta-design-two .btn:hover{
+                        background: <?php echo $fields['btn_background'];?>;
+                        color: <?php echo $fields['btn_text'];?>;
+                    }
+                <?php endif;?>
+                #<?php echo $block_id;?>.cta-design-two .cta-block{
+                color: <?php echo $fields['text_color'];?>;
+                }
+                #<?php echo $block_id;?>.cta-design-two .cta-content a{
+                    color: <?php echo $fields['text_color'];?>;
+                    text-decoration: underline;
+                    font-weight: bold;
+                    text-decoration: none;
+                    border-bottom: 2px solid <?php echo $fields['text_color'];?>;
+                }
+
+
+        </style>
+		<?php
+	} );
 
 
     Block::make( __( 'Business name' ) )
