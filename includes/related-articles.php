@@ -56,14 +56,14 @@ function show_related_articles(){
             }
         }
         ?>
-       <div class="carousel-container">
+       <div class="ek-article-carousel-container">
         <h2 class="related-articles-heading"><?php echo $heading_text; ?></h2>
-        <div class="carousel-wrapper">
+        <div class="ek-article-carousel-wrapper">
     <?php
         while ($posts_query->have_posts()) {
             $posts_query->the_post();
             ?>
-            <div class="carousel-item">
+            <div class="ek-article-carousel-item">
             <div class="ac-item-wrapper articles-item">
            <div class="article-col">
                         <div class="single-article">
@@ -113,8 +113,8 @@ function show_related_articles(){
             }
         ?>
         </div>
-        <button class="carousel-nav carousel-prev">←</button>
-        <button class="carousel-nav carousel-next">→</button>
+        <button class="ek-article-carousel-nav ek-article-carousel-prev">←</button>
+        <button class="ek-article-carousel-nav ek-article-carousel-next">→</button>
       </div>
         <?php
         // Reset post data
@@ -344,49 +344,50 @@ opacity: 1;
 }
 }
 
-.carousel-container {
-            position: relative;
-            width: 100%;
-            margin: 0 auto;
-            overflow: hidden;
-            max-width: 1200px;
-        }
+.ek-article-carousel-container {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    max-width: 1200px;
+}
 
-        .carousel-wrapper {
-            display: flex;
-            transition: transform 0.3s ease-in-out;
-            width: 100%;
-            /* gap: 25px; */
-        }
+.ek-article-carousel-wrapper {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+    width: 100%;
+    /* gap: 25px; */
+}
 
-        .carousel-item {
-            flex: 0 0 auto;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .carousel-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: none;
-            border-radius: 50%;
-        }
+.ek-article-carousel-item {
+    flex: 0 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
 
-        .carousel-prev {
-            left: 10px;
-        }
+.ek-article-carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    border-radius: 50%;
+}
 
-        .carousel-next {
-            right: 10px;
-        }
+.ek-article-carousel-prev {
+    left: 10px;
+}
+
+.ek-article-carousel-next {
+    right: 10px;
+}
     </style>
 
 <script>
@@ -394,10 +395,10 @@ opacity: 1;
             constructor(container, config) {
                 this.container = container;
                 this.config = config;
-                this.wrapper = container.querySelector('.carousel-wrapper');
-                this.items = container.querySelectorAll('.carousel-item');
-                this.prevBtn = container.querySelector('.carousel-prev');
-                this.nextBtn = container.querySelector('.carousel-next');
+                this.wrapper = container.querySelector('.ek-article-carousel-wrapper');
+                this.items = container.querySelectorAll('.ek-article-carousel-item');
+                this.prevBtn = container.querySelector('.ek-article-carousel-prev');
+                this.nextBtn = container.querySelector('.ek-article-carousel-next');
 
                 this.currentIndex = 0;
                 this.totalItems = this.items.length;
@@ -468,7 +469,7 @@ opacity: 1;
         };
 
         // Initialize the carousel with config
-        const carouselContainer = document.querySelector('.carousel-container');
+        const carouselContainer = document.querySelector('.ek-article-carousel-container');
         new Carousel(carouselContainer, carouselConfig);
     </script>
     <?php
