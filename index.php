@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.6.2
+Version: 1.6.3
 
 */
 
@@ -186,7 +186,15 @@ if( !function_exists('carbon_fields_boot_plugin')){
     ->add_tab( __( 'Related Articles' ), array(
 
         Field::make( 'checkbox', 'style_first_character', 'Style First Letter' ),
-        Field::make( 'color', 'first_letter_color', __( 'Letter color' ) )
+        Field::make( 'color', 'first_letter_color', __( 'Letter color' ) ),
+        Field::make( 'select', 'related_article_display', __( 'Related Article Display' ) )
+        ->add_options( array(
+            'disabled' => __( 'Disabled' ),
+            'use_block' => __( 'Use Block' ),
+            'auto_load' => __( 'Auto Load' ),
+        ) ),
+        Field::make( 'color', 'article_color_one', __( 'Color one' ) ),
+        Field::make( 'color', 'article_color_two', __( 'Color one' ) )
 
 
 
@@ -943,3 +951,4 @@ add_action( 'wp_head', 'add_eat_bio_schema' );
 
 include('includes/shortcode_generator/index.php');
 include('includes/first-character.php');
+include("includes/related-articles.php");
