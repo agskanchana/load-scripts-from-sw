@@ -70,7 +70,15 @@ function show_related_articles(){
                             <div class="img-holder">
                                 <?php
                                  if (has_post_thumbnail()) {
-                                    echo get_the_post_thumbnail(get_the_ID(), 'full');
+                                    $thumbnail_id = get_post_thumbnail_id(get_the_ID());
+                                    $image_data = wp_get_attachment_image_src($thumbnail_id, 'full');
+                                    $image_url = $image_data[0];
+                                    $image_width = $image_data[1];
+                                    $image_height = $image_data[2];
+                                    $image_alt = get_post_meta($thumbnail_id, '_wp_attachment_image_alt', true);
+                                    ?>
+                                    <img class="lazyload" dara-src="<?php echo $image_url;?>" alt="<?php echo $image_alt;?>" width="<?php echo $image_width;?>" height="<?php echo $image_height;?>">
+                                    <?php
                                  }
                                 ?>
                             </div>
