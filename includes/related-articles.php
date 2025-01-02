@@ -77,7 +77,7 @@ function show_related_articles(){
                                     $image_height = $image_data[2];
                                     $image_alt = get_post_meta($thumbnail_id, '_wp_attachment_image_alt', true);
                                     ?>
-                                    <img class="lazyload" dara-src="<?php echo $image_url;?>" alt="<?php echo $image_alt;?>" width="<?php echo $image_width;?>" height="<?php echo $image_height;?>">
+                                    <img class="lazyload" data-src="<?php echo $image_url;?>" alt="<?php echo $image_alt;?>" width="<?php echo $image_width;?>" height="<?php echo $image_height;?>">
                                     <?php
                                  }
                                 ?>
