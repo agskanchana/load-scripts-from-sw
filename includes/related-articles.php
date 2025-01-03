@@ -1,9 +1,42 @@
 <?php
-// Add this code to your theme's functions.php or a custom plugin
+
+function has_related_posts() {
+
+    if (is_front_page()) {
+        $category_slug = 'featured-articles';
+    } else {
+        global $post;
+        if ($post) {
+            $category_slug = $post->post_name;
+        } else {
+            return false;
+        }
+    }
+
+
+    $category = get_category_by_slug($category_slug);
+    if (!$category) {
+        return false;
+    }
+
+
+    $query_args = array(
+        'category_name' => $category_slug,
+        'posts_per_page' => 1,
+        'fields' => 'ids',
+    );
+
+    $posts = get_posts($query_args);
+
+    return !empty($posts);
+}
 
 
 
 function show_related_articles(){
+
+
+
     $article_method = carbon_get_theme_option('related_article_display');
     if(isset($article_method) && $article_method == 'auto_load'):
 
@@ -55,6 +88,8 @@ function show_related_articles(){
             $heading_text = 'Related Article';
             }
         }
+
+
         ?>
        <div class="ek-article-carousel-container">
         <h2 class="related-articles-heading"><?php echo $heading_text; ?></h2>
@@ -137,79 +172,10 @@ function show_related_articles(){
 // add the action
 add_action( "get_footer", "show_related_articles" , 10, 2);
 
-function custom_category_posts_shortcode($atts) {
-    // Get current page/post slug
-    $current_slug = get_post_field('post_name', get_post());
-
-    // Initialize output variable
-    $output = '';
-
-    // Check if we're on the front page
-    if (is_front_page()) {
-        $category_slug = 'featured-articles';
-    } else {
-        // For other pages, use the current page slug
-        $category_slug = $current_slug;
-    }
-
-    // Setup query arguments
-    $args = array(
-        'post_type' => 'post',
-        'post_status' => 'publish',
-        'posts_per_page' => -1,
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'category',
-                'field' => 'slug',
-                'terms' => $category_slug
-            )
-        )
-    );
-
-    // Run the query
-    $posts_query = new WP_Query($args);
-
-    if ($posts_query->have_posts()) {
-        $output .= '<div class="category-posts-container">';
-
-        while ($posts_query->have_posts()) {
-            $posts_query->the_post();
-
-            $output .= '<article class="category-post">';
-
-            // Add featured image if exists
-            if (has_post_thumbnail()) {
-                $output .= '<div class="post-thumbnail">';
-                $output .= get_the_post_thumbnail(get_the_ID(), 'medium');
-                $output .= '</div>';
-            }
-
-            // Post title
-            $output .= '<h2 class="post-title"><a href="' . get_permalink() . '">' . get_the_title() . '</a></h2>';
-
-            // Post excerpt
-            $output .= '<div class="post-excerpt">' . get_the_excerpt() . '</div>';
-
-            // Read more link
-            $output .= '<a href="' . get_permalink() . '" class="read-more">Read More</a>';
-
-            $output .= '</article>';
-        }
-
-        $output .= '</div>';
-
-        // Reset post data
-        wp_reset_postdata();
-    } else {
-        $output .= '<p>No posts found in this category.</p>';
-    }
-
-    return $output;
-}
-add_shortcode('category_posts', 'custom_category_posts_shortcode');
 
 // Add some basic CSS
 function add_category_posts_styles() {
+    if (has_related_posts()):
     $color_one = 'var(--color_one)';
     if(carbon_get_theme_option('article_color_one')){
         $color_one = carbon_get_theme_option('article_color_one');
@@ -481,5 +447,6 @@ opacity: 1;
         new Carousel(carouselContainer, carouselConfig);
     </script>
     <?php
+    endif;
 }
 add_action('wp_footer', 'add_category_posts_styles');
