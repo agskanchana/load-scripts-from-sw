@@ -121,13 +121,26 @@ function show_related_articles(){
                             <div class="text-holder">
                                 <div class="meta-box">
                                     <div class="author">
-                                        <a href="<?php echo get_page_slug_by_id(get_theme_mod('author_page'));?>">By <?php the_author(); ?></a>
+                                        <a href="<?php echo get_page_slug_by_id(get_theme_mod('author_page'));?>">
+                                        <i class="fa-regular fa-user"></i>
+                                        By <?php the_author(); ?></a>
                                     </div>
                                     <div class="date">
                                         <div class="icon-box">
-                                            <svg width="20px" height="20px" viewBox="0 0 25.135 23.336" xmlns="http://www.w3.org/2000/svg"><switch transform="translate(-.662 -1.56) scale(.26458)"><g><path d="M86.8 13.2H72.9v-4c0-1.8-1.5-3.3-3.3-3.3s-3.3 1.5-3.3 3.3v4H33.8v-4c0-1.8-1.5-3.3-3.3-3.3s-3.3 1.5-3.3 3.3v4h-14C7.3 13.2 2.5 18 2.5 23.8v59.6c0 5.9 4.8 10.7 10.7 10.7h73.6c5.9 0 10.7-4.8 10.7-10.7V23.8c0-5.8-4.8-10.6-10.7-10.6zm4.1 70.2c0 2.2-1.8 4-4.1 4H13.2c-2.2 0-4.1-1.8-4.1-4V41h81.7v42.4zm0-49.1H9.1V23.8c0-2.2 1.8-4 4.1-4h13.9v4c0 1.8 1.5 3.3 3.3 3.3s3.3-1.5 3.3-3.3v-4h32.5v4c0 1.8 1.5 3.3 3.3 3.3s3.3-1.5 3.3-3.3v-4h13.9c2.2 0 4.1 1.8 4.1 4v10.5z"></path><path d="M24.7 61h7.7c.9 0 1.7-.8 1.7-1.7v-5.5c0-.9-.8-1.7-1.7-1.7h-7.7c-.9 0-1.7.8-1.7 1.7v5.5c-.1.9.7 1.7 1.7 1.7zM46.2 61h7.7c.9 0 1.7-.8 1.7-1.7v-5.5c0-.9-.8-1.7-1.7-1.7h-7.7c-.9 0-1.7.8-1.7 1.7v5.5c-.1.9.7 1.7 1.7 1.7zM67.6 61h7.7c.9 0 1.7-.8 1.7-1.7v-5.5c0-.9-.8-1.7-1.7-1.7h-7.7c-.9 0-1.7.8-1.7 1.7v5.5c0 .9.8 1.7 1.7 1.7zM24.7 76.6h7.7c.9 0 1.7-.8 1.7-1.7v-5.5c0-.9-.8-1.7-1.7-1.7h-7.7c-.9 0-1.7.8-1.7 1.7v5.5c-.1.9.7 1.7 1.7 1.7zM46.2 76.6h7.7c.9 0 1.7-.8 1.7-1.7v-5.5c0-.9-.8-1.7-1.7-1.7h-7.7c-.9 0-1.7.8-1.7 1.7v5.5c-.1.9.7 1.7 1.7 1.7zM67.6 76.6h7.7c.9 0 1.7-.8 1.7-1.7v-5.5c0-.9-.8-1.7-1.7-1.7h-7.7c-.9 0-1.7.8-1.7 1.7v5.5c0 .9.8 1.7 1.7 1.7z"></path></g></switch></svg>
+                                        <!-- <i class="fa-solid fa-calendar-days"></i> -->
                                         </div>
-                                        <?php echo get_the_date('F jS, Y');?>                               </div>
+                                        <?php
+                                        $day = get_the_date('j'); // Day of the month without leading zeros
+                                        $month = get_the_date('M'); // Three-letter month abbreviation
+                                        ?>
+                                        <div class="date-container">
+                                        <div class="date-box">
+                                            <div class="day"><?php echo $day;?></div>
+                                            <div class="month"><?php echo $month;?></div>
+                                        </div>
+                                        </div>
+
+                                     </div>
                                 </div>
 
                                 <h2 class="article-title">
@@ -139,11 +152,8 @@ function show_related_articles(){
                                     </div>
 
                                 <div class="read-more-btn">
-                                    <a href="<?php echo get_permalink();?>">
-                                    <div class="icon-box">
-                                        <svg width="32px" height="10px" viewBox="0 0 16.933 6.351" xmlns="http://www.w3.org/2000/svg"><path d="M13.493.006a.79.79 0 00-.53 1.382l-.001.002 1.108.997H.793a.794.794 0 100 1.588H14.07l-1.108.997.002.003a.79.79 0 00-.265.588c0 .438.356.794.794.794.204 0 .389-.08.53-.207l.001.002 2.646-2.38-.002-.003c.161-.145.265-.354.265-.588s-.104-.442-.265-.588l.002-.002L14.024.21l-.002.002a.79.79 0 00-.529-.206z"></path></svg>
-                                    </div>
-                                    Continue Reading
+                                    <a class="btn" href="<?php echo get_permalink();?>">
+                                    Continue Reading <i class="fa-solid fa-arrow-right"></i>
                                     </a>
                                 </div>
                             </div>
@@ -225,47 +235,57 @@ position: relative;
 display: block;
 border: 1px solid #eeeeee;
 padding: 30px 30px 22px;
+padding-top: 10px;
 color: #000;
 }
 .single-article .text-holder .meta-box{
 position: relative;
+display: flex;
+justify-content: space-between;
+align-items: center;
 }
-.single-article .text-holder .meta-box .author{
-position: absolute;
-top: -42px;
-right: 0;
+.article-col .date-container {
+    display: inline-block;
+    text-align: center;
+    padding: 6px;
 }
-.single-article .text-holder .meta-box .author a{
-background: <?php echo $color_one;?>;
-color: #fff;
-padding: 12px 20px 12px;
-font-size: 12px;
-line-height: 13px;
-font-weight: 400;
-text-transform: uppercase;
-transition: all 500ms ease;
-border-radius: 6px;
-letter-spacing: 1px;
+
+.article-col .day {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+    position: relative;
+}
+
+.article-col .day::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 2px;
+    background-color: grey;
+    margin: 8px auto 0;
+}
+
+.article-col .month {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 8px 0 0;
+    letter-spacing: 0.05em;
+}
+.article-col .author a{
+    color: <?php echo $color_one;?>;
 }
 .single-article .text-holder .meta-box .date .icon-box, .blog-role .single-article .text-holder .read-more-btn .icon-box{
 display: inline;
 }
-.single-article .text-holder .meta-box .date .icon-box > svg{
-height: 20px;
-width: 20px;
-fill: #000;
-margin-top: -4px;
-margin-right: 4px;
-}
+
 .single-article .text-holder .article-title{
 margin-top: 15px;
 margin-bottom: 20px;
 font-size: 20px;
 font-weight: 700;
 width: 100%;
-/* white-space: nowrap; */
-/* overflow: hidden !important; */
-/* text-overflow: ellipsis; */
 }
 .single-article .text-holder .article-title a{
 color: <?php echo $color_one;?>;
@@ -282,13 +302,7 @@ margin-top: -4px;
 margin-right: 4px;
 transition: fill 500ms ease;
 }
-.single-article .text-holder .read-more-btn a{
-color: <?php echo $color_one;?>;
-font-size: 13px;
-font-weight: 800;
-text-transform: uppercase;
-transition: color 500ms ease;
-}
+
 .single-article:hover .img-holder:after{
 transform: scaleY(1);
 transition: .5s ease;
@@ -296,9 +310,7 @@ transition: .5s ease;
 .single-article:hover .img-holder img{
 transform: scale(1.2, 1.2);
 }
-.single-article:hover .meta-box .author a{
-background: <?php echo $color_two;?>;
-}
+
 .single-article:hover .read-more-btn a, .blog-role .single-article .article-title a:hover{
 color:<?php echo $color_two;?>;
 }
@@ -306,7 +318,12 @@ color:<?php echo $color_two;?>;
 fill: <?php echo $color_two;?>;
 }
 
+.article-col .date{
+    display: flex;
+    align-items: center;
+    gap: 4px;
 
+}
 .invisible{
 visibility: visible !important;
 opacity: 1;
@@ -362,6 +379,8 @@ opacity: 1;
 .ek-article-carousel-next {
     right: 10px;
 }
+
+
     </style>
 
 <script>
