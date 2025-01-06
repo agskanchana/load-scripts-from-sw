@@ -186,6 +186,9 @@ add_action( "get_footer", "show_related_articles" , 10, 2);
 // Add some basic CSS
 function add_category_posts_styles() {
     if (has_related_posts()):
+    $article_method = carbon_get_theme_option('related_article_display');
+    if(isset($article_method) && $article_method == 'auto_load'):
+
     $color_one = 'var(--color_one)';
     if(carbon_get_theme_option('article_color_one')){
         $color_one = carbon_get_theme_option('article_color_one');
@@ -467,5 +470,6 @@ opacity: 1;
     </script>
     <?php
     endif;
+endif;
 }
 add_action('wp_footer', 'add_category_posts_styles');
