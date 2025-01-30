@@ -55,19 +55,43 @@ function shortcode_gen_table_content( $column_name, $post_id ) {
 }
 
 
-add_shortcode('cta',function($atts){
+
+add_shortcode('cta', function($atts) {
+    // Prevent recursion and multiple filter applications
+    remove_filter('the_content', 'wpautop');
+    remove_filter('the_content', 'shortcode_unautop');
+
+    // Start output buffering
     ob_start();
 
-   $post_id = $atts['id'];
+    $post_id = isset($atts['id']) ? (int)$atts['id'] : 0;
 
-$shortcode = get_post($post_id);
-if($shortcode){
-    echo apply_filters('the_content',$shortcode->post_content);
-}
-     return ob_get_clean();
+    if ($post_id > 0) {
+        $shortcode = get_post($post_id);
+        if ($shortcode && !is_wp_error($shortcode)) {
+            // Get the raw content
+            $content = $shortcode->post_content;
 
+            // Apply specific filters if needed, but avoid the_content filter
+            $content = do_blocks($content);
+            $content = wptexturize($content);
+            $content = convert_smilies($content);
+            $content = convert_chars($content);
 
+            echo do_shortcode($content);
+        }
+    }
+
+    // Get the buffered content
+    $output = ob_get_clean();
+
+    // Restore filters
+    add_filter('the_content', 'wpautop');
+    add_filter('the_content', 'shortcode_unautop');
+
+    return $output;
 });
+
 
 add_action('init', function () {
     // Define the custom post type name.
