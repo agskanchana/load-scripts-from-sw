@@ -11,3 +11,29 @@
 .ekwa-faq-content {
     margin: 0;
 }
+
+/* New question and answer blocks */
+.ekwa-faq-question {
+    margin-bottom: 0;
+    padding: 0.5em 0;
+
+    h2, h3, h4 {
+        margin-top: 0;
+        margin-bottom: 0;
+        color: #0073aa;
+    }
+}
+
+.ekwa-faq-answer {
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    padding: 0.5em 0 1em;
+
+    p:first-child {
+        margin-top: 0;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}

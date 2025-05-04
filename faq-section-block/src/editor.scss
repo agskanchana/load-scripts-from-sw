@@ -43,3 +43,24 @@
 .ekwa-faq-content {
     min-height: 50px;
 }
+
+/* New question and answer blocks */
+.ekwa-faq-question {
+    background-color: #e9f5f9;
+    padding: 10px 15px;
+    margin-bottom: 0;
+    border-left: 4px solid #0073aa;
+
+    h2, h3, h4 {
+        margin: 0;
+        color: #0073aa;
+    }
+}
+
+.ekwa-faq-answer {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-left: 4px solid #46b450;
+}

@@ -93,6 +93,10 @@ add_action('init', 'register_container_block');
  * A container block for FAQ sections with schema markup
  */
 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 /**
  * Create necessary files if they don't exist
  */
@@ -107,7 +111,7 @@ function ensure_faq_section_files() {
     // Create asset file if it doesn't exist
     $asset_file_path = $build_dir . '/index.asset.php';
     if (!file_exists($asset_file_path)) {
-        file_put_contents($asset_file_path, '<?php return array("dependencies" => array("wp-blocks", "wp-element", "wp-block-editor", "wp-i18n"), "version" => "1.0.0");');
+        file_put_contents($asset_file_path, '<?php return array("dependencies" => array("wp-blocks", "wp-element", "wp-block-editor", "wp-i18n", "wp-components"), "version" => "1.0.0");');
     }
 
     // Create editor.css if it doesn't exist
@@ -115,18 +119,24 @@ function ensure_faq_section_files() {
         $editor_css = ".ekwa-faq-section { border: 2px dashed #ccc; padding: 20px; position: relative; background: #f9f9f9; min-height: 100px; }";
         $editor_css .= ".ekwa-faq-section::before { content: \"FAQ Section\"; position: absolute; top: -12px; left: 10px; background: #fff; padding: 0 10px; font-size: 12px; color: #888; }";
         $editor_css .= ".ekwa-faq-content { min-height: 50px; }";
+        $editor_css .= ".ekwa-faq-question { background-color: #e9f5f9; padding: 10px 15px; margin-bottom: 0; border-left: 4px solid #0073aa; }";
+        $editor_css .= ".ekwa-faq-question h2, .ekwa-faq-question h3, .ekwa-faq-question h4 { margin: 0; color: #0073aa; }";
+        $editor_css .= ".ekwa-faq-answer { background-color: #f9f9f9; padding: 15px; margin-top: 0; margin-bottom: 20px; border-left: 4px solid #46b450; }";
         file_put_contents($build_dir . '/editor.css', $editor_css);
     }
 
     // Create style.css if it doesn't exist
     if (!file_exists($build_dir . '/style.css')) {
         $style_css = ".ekwa-faq-section { padding: 1em; margin-bottom: 1.5em; }";
+        $style_css .= ".ekwa-faq-question { margin-bottom: 0; padding: 0.5em 0; }";
+        $style_css .= ".ekwa-faq-question h2, .ekwa-faq-question h3, .ekwa-faq-question h4 { margin-top: 0; margin-bottom: 0; color: #0073aa; }";
+        $style_css .= ".ekwa-faq-answer { margin-top: 0; margin-bottom: 1.5em; padding: 0.5em 0 1em; }";
         file_put_contents($build_dir . '/style.css', $style_css);
     }
 }
 
 /**
- * Register the FAQ section block
+ * Register the FAQ section block and child blocks
  */
 function register_faq_section_block() {
     // Ensure necessary files exist
@@ -138,7 +148,7 @@ function register_faq_section_block() {
         $asset_file = include($asset_file_path);
     } else {
         $asset_file = [
-            'dependencies' => ['wp-blocks', 'wp-element', 'wp-block-editor', 'wp-i18n'],
+            'dependencies' => ['wp-blocks', 'wp-element', 'wp-block-editor', 'wp-i18n', 'wp-components'],
             'version' => '1.0.0'
         ];
     }
@@ -168,8 +178,28 @@ function register_faq_section_block() {
         filemtime(plugin_dir_path(__FILE__) . 'build/style.css')
     );
 
-    // Register the block
+    // Register the parent block
     register_block_type('ekwa/faq-section', array(
+        'editor_script' => 'faq-section-block-editor',
+        'editor_style' => 'faq-section-block-editor-style',
+        'style' => 'faq-section-block-style',
+    ));
+
+    // Register child blocks
+    register_block_type('ekwa/faq-question', array(
+        'editor_script' => 'faq-section-block-editor',
+        'editor_style' => 'faq-section-block-editor-style',
+        'style' => 'faq-section-block-style',
+    ));
+
+    register_block_type('ekwa/faq-answer', array(
+        'editor_script' => 'faq-section-block-editor',
+        'editor_style' => 'faq-section-block-editor-style',
+        'style' => 'faq-section-block-style',
+    ));
+
+    // Also register the container block (optional)
+    register_block_type('ekwa/container-block', array(
         'editor_script' => 'faq-section-block-editor',
         'editor_style' => 'faq-section-block-editor-style',
         'style' => 'faq-section-block-style',
