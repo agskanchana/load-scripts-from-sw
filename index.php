@@ -709,6 +709,7 @@ function print_tracking_codes(){
 
 
 include('yoast-faq-block/ekwa-yoast-faq.php');
+include('faq-section-block/index.php');
 
 function faq_init() {
     ?>
