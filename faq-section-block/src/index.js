@@ -109,7 +109,7 @@ registerBlockType('ekwa/faq-section', {
 
         return (
             <div {...blockProps}>
-                <div className="ekwa-faq-content" itemScope itemType="https://schema.org/FAQPage">
+                <div className="ekwa-faq-content" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
                     <InnerBlocks.Content />
                 </div>
             </div>
@@ -185,7 +185,7 @@ registerBlockType('ekwa/faq-question', {
         const HeadingTag = 'h' + level;
 
         return (
-            <div {...blockProps} itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
+            <div {...blockProps} >
                 <HeadingTag className="ekwa-faq-question-text" itemProp="name">
                     {content}
                 </HeadingTag>
@@ -209,11 +209,24 @@ registerBlockType('ekwa/faq-answer', {
             className: 'ekwa-faq-answer'
         });
 
+        // List of allowed blocks to include in this answer
+        const ALLOWED_BLOCKS = [
+            'core/paragraph',
+            'core/list',
+            'core/heading',
+            'core/image',
+            'acf/div-block' // ACF block - make sure this name matches your registered ACF block
+        ];
+
         return (
             <div {...blockProps}>
                 <InnerBlocks
-                    template={[['core/paragraph', { placeholder: 'Write your answer here...' }]]}
-                    templateLock={false}
+                    allowedBlocks={ALLOWED_BLOCKS}
+                    template={[
+                        ['core/paragraph', { placeholder: 'Write your answer here...' }]
+                    ]}
+                    templateLock={false} // Allow users to add/remove/reorder blocks
+                    renderAppender={() => <InnerBlocks.ButtonBlockAppender />} // Add a button to add more blocks
                 />
             </div>
         );
