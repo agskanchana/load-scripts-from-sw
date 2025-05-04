@@ -1,0 +1,17 @@
+{
+  "name": "faq-section-block",
+  "version": "1.0.0",
+  "description": "A block for organizing FAQ content with schema markup",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "wp-scripts build && npm run build:css",
+    "start": "wp-scripts start & npm run build:css -- --watch",
+    "build:css": "sass src/editor.scss:build/editor.css src/style.scss:build/style.css --style=compressed"
+  },
+  "author": "",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "@wordpress/scripts": "^26.5.0",
+    "sass": "^1.87.0"
+  }
+}
