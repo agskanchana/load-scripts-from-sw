@@ -64,6 +64,8 @@ export default function registerFaqQuestionBlock() {
                             onChange={(newContent) => setAttributes({ content: newContent })}
                             placeholder={__('Write your question here...')}
                             className="ekwa-faq-question-text"
+                            // Add itemProp to show in editor
+                            itemProp="name"
                         />
                     </div>
                 </>
@@ -79,7 +81,8 @@ export default function registerFaqQuestionBlock() {
             const HeadingTag = 'h' + level;
 
             return (
-                <div {...blockProps} itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
+                <div {...blockProps} >
+                    {/* Add itemProp="name" directly to the heading tag */}
                     <HeadingTag className="ekwa-faq-question-text" itemProp="name">
                         {content}
                     </HeadingTag>
@@ -87,9 +90,40 @@ export default function registerFaqQuestionBlock() {
             );
         },
 
-        // Add deprecation for FAQ Question Block
+        // Add current version to deprecation to maintain backward compatibility
         deprecated: [
             {
+                // Most recent version - almost identical to current but added for safety
+                attributes: {
+                    content: {
+                        type: 'string',
+                        default: ''
+                    },
+                    level: {
+                        type: 'number',
+                        default: 2
+                    }
+                },
+
+                save: ({ attributes }) => {
+                    const { content, level } = attributes;
+                    const blockProps = useBlockProps.save({
+                        className: 'ekwa-faq-question'
+                    });
+
+                    const HeadingTag = 'h' + level;
+
+                    return (
+                        <div {...blockProps} itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
+                            <HeadingTag className="ekwa-faq-question-text" itemProp="name">
+                                {content}
+                            </HeadingTag>
+                        </div>
+                    );
+                },
+            },
+            {
+                // Previous version before useBlockProps
                 attributes: {
                     content: {
                         type: 'string',
@@ -105,7 +139,6 @@ export default function registerFaqQuestionBlock() {
                     const { content, level } = attributes;
                     const HeadingTag = 'h' + level;
 
-                    // Support version before useBlockProps
                     return (
                         <div className="ekwa-faq-question" itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
                             <HeadingTag className="ekwa-faq-question-text" itemProp="name">
