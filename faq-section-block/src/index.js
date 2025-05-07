@@ -109,6 +109,15 @@ registerBlockType('ekwa/faq-section', {
 
         return (
             <div {...blockProps}>
+                <script dangerouslySetInnerHTML={{
+                    __html: `
+                        (function() {
+                            var htmlAttribute = document.querySelector('html');
+                            htmlAttribute.setAttribute("itemscope", " ");
+                            htmlAttribute.setAttribute("itemtype", "https://schema.org/FAQPage");
+                        })();
+                    `
+                }}></script>
                 <div className="ekwa-faq-content" itemScope itemType="https://schema.org/FAQPage">
                     <InnerBlocks.Content />
                 </div>
