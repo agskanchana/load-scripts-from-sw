@@ -61,7 +61,7 @@ export default function registerFaqSectionBlock() {
                             })();
                         `
                     }}></script>
-                    <div className="ekwa-faq-content" itemScope itemType="https://schema.org/FAQPage">
+                    <div className="ekwa-faq-content" itemScope itemprop="mainEntity" itemType="https://schema.org/Question">
                         <InnerBlocks.Content />
                     </div>
                 </div>
@@ -87,7 +87,7 @@ export default function registerFaqSectionBlock() {
 
                     return (
                         <div {...blockProps}>
-                            <div className="ekwa-faq-content" itemScope itemType="https://schema.org/FAQPage">
+                            <div className="ekwa-faq-content" itemScope itemprop="mainEntity" itemType="https://schema.org/Question">
                                 <InnerBlocks.Content />
                             </div>
                         </div>
