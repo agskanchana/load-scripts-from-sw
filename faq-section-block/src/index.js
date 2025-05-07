@@ -62,6 +62,31 @@ registerBlockType('ekwa/container-block', {
             </div>
         );
     },
+
+    // Add deprecation for Container Block
+    deprecated: [
+        {
+            attributes: {
+                blockId: {
+                    type: 'string',
+                    default: ''
+                }
+            },
+
+            save: ({ attributes }) => {
+                const { blockId } = attributes;
+
+                // Previous version might not have used useBlockProps
+                return (
+                    <div className="ekwa-container-block" id={blockId}>
+                        <div className="ekwa-container-content">
+                            <InnerBlocks.Content />
+                        </div>
+                    </div>
+                );
+            },
+        },
+    ],
 });
 
 /**
@@ -104,7 +129,8 @@ registerBlockType('ekwa/faq-section', {
         const { blockId } = attributes;
         const blockProps = useBlockProps.save({
             className: 'ekwa-faq-section',
-            id: blockId
+            id: blockId,
+            'data-schema-added': 'true' // Mark that this version adds schema
         });
 
         return (
@@ -124,6 +150,56 @@ registerBlockType('ekwa/faq-section', {
             </div>
         );
     },
+
+    // Add deprecation for FAQ Section Block
+    deprecated: [
+        {
+            // Version with itemScope on content but without script
+            attributes: {
+                blockId: {
+                    type: 'string',
+                    default: ''
+                }
+            },
+
+            save: ({ attributes }) => {
+                const { blockId } = attributes;
+                const blockProps = useBlockProps.save({
+                    className: 'ekwa-faq-section',
+                    id: blockId
+                });
+
+                return (
+                    <div {...blockProps}>
+                        <div className="ekwa-faq-content" itemScope itemType="https://schema.org/FAQPage">
+                            <InnerBlocks.Content />
+                        </div>
+                    </div>
+                );
+            },
+        },
+        {
+            // Even older version without schema
+            attributes: {
+                blockId: {
+                    type: 'string',
+                    default: ''
+                }
+            },
+
+            save: ({ attributes }) => {
+                const { blockId } = attributes;
+
+                return (
+                    <div className="ekwa-faq-section" id={blockId}>
+                        <div className="ekwa-faq-content">
+                            <InnerBlocks.Content />
+                        </div>
+                    </div>
+                );
+            },
+        },
+    ],
 });
 
 /**
@@ -200,7 +276,63 @@ registerBlockType('ekwa/faq-question', {
                 </HeadingTag>
             </div>
         );
-    }
+    },
+
+    // Add deprecation for FAQ Question Block
+    deprecated: [
+        {
+            attributes: {
+                content: {
+                    type: 'string',
+                    default: ''
+                },
+                level: {
+                    type: 'number',
+                    default: 2
+                }
+            },
+
+            save: ({ attributes }) => {
+                const { content, level } = attributes;
+                const HeadingTag = 'h' + level;
+
+                // Support version before useBlockProps
+                return (
+                    <div className="ekwa-faq-question" itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
+                        <HeadingTag className="ekwa-faq-question-text" itemProp="name">
+                            {content}
+                        </HeadingTag>
+                    </div>
+                );
+            },
+        },
+        {
+            // Even older version without schema support
+            attributes: {
+                content: {
+                    type: 'string',
+                    default: ''
+                },
+                level: {
+                    type: 'number',
+                    default: 2
+                }
+            },
+
+            save: ({ attributes }) => {
+                const { content, level } = attributes;
+                const HeadingTag = 'h' + level;
+
+                return (
+                    <div className="ekwa-faq-question">
+                        <HeadingTag className="ekwa-faq-question-text">
+                            {content}
+                        </HeadingTag>
+                    </div>
+                );
+            },
+        },
+    ],
 });
 
 /**
@@ -253,5 +385,52 @@ registerBlockType('ekwa/faq-answer', {
                 </div>
             </div>
         );
-    }
+    },
+
+    // Add deprecation for FAQ Answer Block
+    deprecated: [
+        {
+            save: () => {
+                // Previous version might not have used useBlockProps
+                return (
+                    <div className="ekwa-faq-answer" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                        <div itemProp="text">
+                            <InnerBlocks.Content />
+                        </div>
+                    </div>
+                );
+            },
+        },
+        {
+            // Even older version without schema
+            save: () => {
+                return (
+                    <div className="ekwa-faq-answer">
+                        <div>
+                            <InnerBlocks.Content />
+                        </div>
+                    </div>
+                );
+            },
+        },
+    ],
 });
+
+/**
+ * Add a listener to ensure schema script only runs once on a page
+ * This prevents duplicate schema additions when multiple FAQ sections exist
+ */
+if (!window.wp?.editor) {
+    // Only run this on the frontend
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.querySelector('.wp-block-ekwa-faq-section')) {
+            // Check if schema is already applied
+            const html = document.querySelector('html');
+            if (!html.hasAttribute('itemscope') || !html.hasAttribute('itemtype')) {
+                html.setAttribute("itemscope", " ");
+                html.setAttribute("itemtype", "https://schema.org/FAQPage");
+                console.log('FAQ schema applied to HTML element');
+            }
+        }
+    });
+}
