@@ -4,7 +4,7 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 1.8.0
+Version: 1.8.1
 
 */
 
@@ -718,19 +718,7 @@ include('faq-section-block/index.php');
 /**
  * Add schema.org attributes to HTML tag via script
  */
-function add_faq_schema_to_html() {
-    // Only add this script on pages that might have FAQ blocks
-    if (has_block('ekwa/faq-section') || is_singular()) {
-        ?>
-        <script>
-            var htmlAttribute = document.querySelector('html');
-            htmlAttribute.setAttribute("itemscope", " ");
-            htmlAttribute.setAttribute("itemtype", "https://schema.org/FAQPage");
-        </script>
-        <?php
-    }
-}
-add_action('wp_footer', 'add_faq_schema_to_html');
+
 
 function faq_init() {
     ?>
