@@ -32,11 +32,7 @@ function ensure_container_block_files() {
         file_put_contents($build_dir . '/editor.css', $editor_css);
     }
 
-    // Create style.css if it doesn't exist
-    if (!file_exists($build_dir . '/style.css')) {
-        $style_css = ".ekwa-container-block { padding: 1em; margin-bottom: 1.5em; }";
-        file_put_contents($build_dir . '/style.css', $style_css);
-    }
+
 }
 
 /**
@@ -70,13 +66,7 @@ function register_container_block() {
         filemtime(plugin_dir_path(__FILE__) . 'build/editor.css')
     );
 
-    // Register the frontend style
-    wp_register_style(
-        'container-block-style',
-        plugins_url('build/style.css', __FILE__),
-        array(),
-        filemtime(plugin_dir_path(__FILE__) . 'build/style.css')
-    );
+
 
     // Register the block
     register_block_type('ekwa/container-block', array(
@@ -112,26 +102,6 @@ function ensure_faq_section_files() {
     $asset_file_path = $build_dir . '/index.asset.php';
     if (!file_exists($asset_file_path)) {
         file_put_contents($asset_file_path, '<?php return array("dependencies" => array("wp-blocks", "wp-element", "wp-block-editor", "wp-i18n", "wp-components"), "version" => "1.0.0");');
-    }
-
-    // Create editor.css if it doesn't exist
-    if (!file_exists($build_dir . '/editor.css')) {
-        $editor_css = ".ekwa-faq-section { border: 2px dashed #ccc; padding: 20px; position: relative; background: #f9f9f9; min-height: 100px; }";
-        $editor_css .= ".ekwa-faq-section::before { content: \"FAQ Section\"; position: absolute; top: -12px; left: 10px; background: #fff; padding: 0 10px; font-size: 12px; color: #888; }";
-        $editor_css .= ".ekwa-faq-content { min-height: 50px; }";
-        $editor_css .= ".ekwa-faq-question { background-color: #e9f5f9; padding: 10px 15px; margin-bottom: 0; border-left: 4px solid #0073aa; }";
-        $editor_css .= ".ekwa-faq-question h2, .ekwa-faq-question h3, .ekwa-faq-question h4 { margin: 0; color: #0073aa; }";
-        $editor_css .= ".ekwa-faq-answer { background-color: #f9f9f9; padding: 15px; margin-top: 0; margin-bottom: 20px; border-left: 4px solid #46b450; }";
-        file_put_contents($build_dir . '/editor.css', $editor_css);
-    }
-
-    // Create style.css if it doesn't exist
-    if (!file_exists($build_dir . '/style.css')) {
-        $style_css = ".ekwa-faq-section { padding: 1em; margin-bottom: 1.5em; }";
-        $style_css .= ".ekwa-faq-question { margin-bottom: 0; padding: 0.5em 0; }";
-        $style_css .= ".ekwa-faq-question h2, .ekwa-faq-question h3, .ekwa-faq-question h4 { margin-top: 0; margin-bottom: 0; color: #0073aa; }";
-        $style_css .= ".ekwa-faq-answer { margin-top: 0; margin-bottom: 1.5em; padding: 0.5em 0 1em; }";
-        file_put_contents($build_dir . '/style.css', $style_css);
     }
 }
 
@@ -170,13 +140,7 @@ function register_faq_section_block() {
         filemtime(plugin_dir_path(__FILE__) . 'build/editor.css')
     );
 
-    // Register the frontend style
-    wp_register_style(
-        'faq-section-block-style',
-        plugins_url('build/style.css', __FILE__),
-        array(),
-        filemtime(plugin_dir_path(__FILE__) . 'build/style.css')
-    );
+
 
     // Register the parent block
     register_block_type('ekwa/faq-section', array(
