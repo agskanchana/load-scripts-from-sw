@@ -109,7 +109,7 @@ registerBlockType('ekwa/faq-section', {
 
         return (
             <div {...blockProps}>
-                <div className="ekwa-faq-content" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <div className="ekwa-faq-content" itemScope itemType="https://schema.org/FAQPage">
                     <InnerBlocks.Content />
                 </div>
             </div>
@@ -125,7 +125,7 @@ registerBlockType('ekwa/faq-question', {
     icon: 'editor-help',
     category: 'design',
     description: __('A question block for use within an FAQ section.'),
-    parent: ['ekwa/faq-section'], // Specifies this as a child block
+    parent: ['ekwa/faq-section', 'core/column'], // Allow in both FAQ Section and columns
 
     attributes: {
         content: {
@@ -185,7 +185,7 @@ registerBlockType('ekwa/faq-question', {
         const HeadingTag = 'h' + level;
 
         return (
-            <div {...blockProps} >
+            <div {...blockProps} itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
                 <HeadingTag className="ekwa-faq-question-text" itemProp="name">
                     {content}
                 </HeadingTag>
@@ -202,7 +202,7 @@ registerBlockType('ekwa/faq-answer', {
     icon: 'editor-textcolor',
     category: 'design',
     description: __('An answer block for use after a FAQ question.'),
-    parent: ['ekwa/faq-section'], // Specifies this as a child block
+    parent: ['ekwa/faq-section', 'core/column'], // Allow in both FAQ Section and columns
 
     edit: () => {
         const blockProps = useBlockProps({
