@@ -3,7 +3,9 @@ import { __ } from '@wordpress/i18n';
 import {
     useBlockProps,
     InspectorControls,
-    RichText
+    RichText,
+    BlockControls,
+    AlignmentToolbar
 } from '@wordpress/block-editor';
 import {
     PanelBody,
@@ -29,19 +31,35 @@ export default function registerFaqQuestionBlock() {
             level: {
                 type: 'number',
                 default: 2 // Default to h2
+            },
+            // Add new alignment attribute with default value
+            textAlign: {
+                type: 'string',
+                default: '' // Empty string means default alignment (inherit)
             }
         },
 
         edit: ({ attributes, setAttributes }) => {
-            const { content, level } = attributes;
+            const { content, level, textAlign } = attributes;
+
+            // Add textAlign to block props if it's set
             const blockProps = useBlockProps({
-                className: 'ekwa-faq-question'
+                className: 'ekwa-faq-question',
+                style: textAlign ? { textAlign } : undefined
             });
 
             const HeadingTag = 'h' + level;
 
             return (
                 <>
+                    {/* Add BlockControls with AlignmentToolbar */}
+                    <BlockControls>
+                        <AlignmentToolbar
+                            value={textAlign}
+                            onChange={(newAlign) => setAttributes({ textAlign: newAlign })}
+                        />
+                    </BlockControls>
+
                     <InspectorControls>
                         <PanelBody title={__('Question Settings')}>
                             <SelectControl
@@ -54,6 +72,19 @@ export default function registerFaqQuestionBlock() {
                                 ]}
                                 onChange={(newLevel) => setAttributes({ level: parseInt(newLevel) })}
                             />
+
+                            {/* Add text alignment control in sidebar too */}
+                            <SelectControl
+                                label={__('Text Alignment')}
+                                value={textAlign}
+                                options={[
+                                    { label: 'Default', value: '' },
+                                    { label: 'Left', value: 'left' },
+                                    { label: 'Center', value: 'center' },
+                                    { label: 'Right', value: 'right' }
+                                ]}
+                                onChange={(newAlign) => setAttributes({ textAlign: newAlign })}
+                            />
                         </PanelBody>
                     </InspectorControls>
 
@@ -64,7 +95,6 @@ export default function registerFaqQuestionBlock() {
                             onChange={(newContent) => setAttributes({ content: newContent })}
                             placeholder={__('Write your question here...')}
                             className="ekwa-faq-question-text"
-                            // Add itemProp to show in editor
                             itemProp="name"
                         />
                     </div>
@@ -73,27 +103,32 @@ export default function registerFaqQuestionBlock() {
         },
 
         save: ({ attributes }) => {
-            const { content, level } = attributes;
+            const { content, level, textAlign } = attributes;
+
+            // Add textAlign to block props if it's set
             const blockProps = useBlockProps.save({
-                className: 'ekwa-faq-question'
+                className: 'ekwa-faq-question',
+                style: textAlign ? { textAlign } : undefined
             });
 
             const HeadingTag = 'h' + level;
 
             return (
-                <div {...blockProps} >
-                    {/* Add itemProp="name" directly to the heading tag */}
-                    <HeadingTag className="ekwa-faq-question-text" itemProp="name">
+                <div {...blockProps}>
+                    <HeadingTag
+                        className="ekwa-faq-question-text"
+                        itemProp="name"
+                    >
                         {content}
                     </HeadingTag>
                 </div>
             );
         },
 
-        // Add current version to deprecation to maintain backward compatibility
+        // Update the deprecation for backward compatibility
         deprecated: [
             {
-                // Most recent version - almost identical to current but added for safety
+                // Current version without text alignment
                 attributes: {
                     content: {
                         type: 'string',
@@ -103,6 +138,52 @@ export default function registerFaqQuestionBlock() {
                         type: 'number',
                         default: 2
                     }
+                },
+
+                // This migrate function will set empty textAlign for old blocks
+                migrate: (attributes) => {
+                    return {
+                        ...attributes,
+                        textAlign: ''
+                    };
+                },
+
+                save: ({ attributes }) => {
+                    const { content, level } = attributes;
+                    const blockProps = useBlockProps.save({
+                        className: 'ekwa-faq-question'
+                    });
+
+                    const HeadingTag = 'h' + level;
+
+                    return (
+                        <div {...blockProps}>
+                            <HeadingTag className="ekwa-faq-question-text" itemProp="name">
+                                {content}
+                            </HeadingTag>
+                        </div>
+                    );
+                },
+            },
+            {
+                // Version with schema attributes on the div
+                attributes: {
+                    content: {
+                        type: 'string',
+                        default: ''
+                    },
+                    level: {
+                        type: 'number',
+                        default: 2
+                    }
+                },
+
+                // This migrate function will set empty textAlign for old blocks
+                migrate: (attributes) => {
+                    return {
+                        ...attributes,
+                        textAlign: ''
+                    };
                 },
 
                 save: ({ attributes }) => {
@@ -135,6 +216,14 @@ export default function registerFaqQuestionBlock() {
                     }
                 },
 
+                // This migrate function will set empty textAlign for old blocks
+                migrate: (attributes) => {
+                    return {
+                        ...attributes,
+                        textAlign: ''
+                    };
+                },
+
                 save: ({ attributes }) => {
                     const { content, level } = attributes;
                     const HeadingTag = 'h' + level;
@@ -159,6 +248,14 @@ export default function registerFaqQuestionBlock() {
                         type: 'number',
                         default: 2
                     }
+                },
+
+                // This migrate function will set empty textAlign for old blocks
+                migrate: (attributes) => {
+                    return {
+                        ...attributes,
+                        textAlign: ''
+                    };
                 },
 
                 save: ({ attributes }) => {
