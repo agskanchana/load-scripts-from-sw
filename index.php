@@ -964,6 +964,10 @@ include('includes/first-character.php');
 include("includes/related-articles.php");
 
 add_action( 'wp_enqueue_scripts', function() {
-    wp_dequeue_style( 'kirki' );
-    wp_dequeue_script( 'kirki' );
-}, 100 );
+    if ( function_exists( 'wp_dequeue_style' ) ) {
+        wp_dequeue_style( 'kirki' );
+    }
+    if ( function_exists( 'wp_dequeue_script' ) ) {
+        wp_dequeue_script( 'kirki' );
+    }
+}, 999 );
