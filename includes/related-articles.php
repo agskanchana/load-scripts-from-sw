@@ -91,7 +91,7 @@ function show_related_articles(){
 
 
         ?>
-       <div class="ek-article-carousel-container">
+       <div class="ek-article-carousel-container" role="region" aria-label="Articles Carousel">
         <h2 class="related-articles-heading"><?php echo $heading_text; ?></h2>
         <div class="ek-article-carousel-wrapper">
     <?php
