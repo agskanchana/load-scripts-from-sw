@@ -975,34 +975,3 @@ add_action( 'wp_enqueue_scripts', function() {
     }
 }, 999 );
 
-
-
-
-
-/**
- * Neutralise the ACF InnerBlocks wrapper div so inner blocks remain
- * direct flex/grid children of their parent block.
- */
-function ekwa_acf_innerblocks_fix_css() {
-    return '.acf-innerblocks-container{display:contents;}';
-}
-
-// Front end.
-add_action( 'wp_enqueue_scripts', function() {
-    wp_register_style( 'ekwa-acf-innerblocks-fix', false );
-    wp_enqueue_style( 'ekwa-acf-innerblocks-fix' );
-    wp_add_inline_style( 'ekwa-acf-innerblocks-fix', ekwa_acf_innerblocks_fix_css() );
-}, 20 );
-
-// Block editor.
-add_action( 'enqueue_block_editor_assets', function() {
-    wp_register_style( 'ekwa-acf-innerblocks-fix-editor', false );
-    wp_enqueue_style( 'ekwa-acf-innerblocks-fix-editor' );
-    wp_add_inline_style( 'ekwa-acf-innerblocks-fix-editor', ekwa_acf_innerblocks_fix_css() );
-} );
-
-
-add_action( 'after_setup_theme', function() {
-    add_editor_style( 'css/acf-innerblocks-fix.css' );
-} );
-
