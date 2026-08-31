@@ -4,11 +4,11 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 2.0.0
+Version: 2.0.1
 
 */
 
-define( 'EKWA_SETTINGS_VERSION', '2.0.0' );
+define( 'EKWA_SETTINGS_VERSION', '2.0.1' );
 
 require 'includes/plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
