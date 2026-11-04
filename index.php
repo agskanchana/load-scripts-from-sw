@@ -4,11 +4,11 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 2.0.3
+Version: 2.0.4
 
 */
 
-define( 'EKWA_SETTINGS_VERSION', '2.0.3' );
+define( 'EKWA_SETTINGS_VERSION', '2.0.4' );
 
 require 'includes/plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
@@ -982,7 +982,7 @@ add_action( 'wp_enqueue_scripts', function() {
  * Neutralise the ACF InnerBlocks wrapper div so inner blocks remain
  * direct flex/grid children of their parent block.
  */
-function ekwa_acf_innerblocks_fix_css() {
+function ekwa_settings_acf_innerblocks_css() {
     return '.acf-innerblocks-container{display:contents;}';
 }
 
@@ -990,14 +990,14 @@ function ekwa_acf_innerblocks_fix_css() {
 add_action( 'wp_enqueue_scripts', function() {
     wp_register_style( 'ekwa-acf-innerblocks-fix', false );
     wp_enqueue_style( 'ekwa-acf-innerblocks-fix' );
-    wp_add_inline_style( 'ekwa-acf-innerblocks-fix', ekwa_acf_innerblocks_fix_css() );
+    wp_add_inline_style( 'ekwa-acf-innerblocks-fix', ekwa_settings_acf_innerblocks_css() );
 }, 20 );
 
 // Block editor.
 add_action( 'enqueue_block_editor_assets', function() {
     wp_register_style( 'ekwa-acf-innerblocks-fix-editor', false );
     wp_enqueue_style( 'ekwa-acf-innerblocks-fix-editor' );
-    wp_add_inline_style( 'ekwa-acf-innerblocks-fix-editor', ekwa_acf_innerblocks_fix_css() );
+    wp_add_inline_style( 'ekwa-acf-innerblocks-fix-editor', ekwa_settings_acf_innerblocks_css() );
 } );
 
 
