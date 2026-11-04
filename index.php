@@ -4,11 +4,11 @@ Plugin Name: Ekwa Settings
 Plugin URI: www.ekwa.com
 Description: Loading theird party scripts from service worker, add Progressive web app
 Author URI: www.sameera.com
-Version: 2.0.3
+Version: 2.0.4
 
 */
 
-define( 'EKWA_SETTINGS_VERSION', '2.0.3' );
+define( 'EKWA_SETTINGS_VERSION', '2.0.4' );
 
 require 'includes/plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
@@ -979,29 +979,73 @@ add_action( 'wp_enqueue_scripts', function() {
 
 
 /**
- * Neutralise the ACF InnerBlocks wrapper div so inner blocks remain
- * direct flex/grid children of their parent block.
+ * ACF InnerBlocks wrapper fix.
+ *
+ * Makes .acf-innerblocks-container transparent (display:contents) so inner
+ * blocks stay direct flex/grid children of their parent block.
+ *
+ * Some themes already ship the old snippet in functions.php, which declares
+ * ekwa_acf_innerblocks_fix_css() without a function_exists() guard. If this
+ * plugin declared that same function, PHP would stop with "Cannot redeclare
+ * ekwa_acf_innerblocks_fix_css()": on activation (the theme is loaded first)
+ * or on every page load (the plugin is loaded first). So:
+ *
+ *   1. Nothing here uses that function name.
+ *   2. The decision is made on after_setup_theme, once functions.php has been
+ *      loaded, so the theme copy can be detected and left to do the job.
  */
-function ekwa_acf_innerblocks_fix_css() {
-    return '.acf-innerblocks-container{display:contents;}';
+if ( ! function_exists( 'ekwa_innerblocks_fix_boot' ) ) {
+
+	/**
+	 * The CSS itself.
+	 *
+	 * @return string
+	 */
+	function ekwa_innerblocks_fix_styles() {
+		return '.acf-innerblocks-container{display:contents;}';
+	}
+
+	/**
+	 * Is this fix already handled by the theme or another plugin?
+	 *
+	 * @return bool
+	 */
+	function ekwa_innerblocks_fix_handled_elsewhere() {
+		// Old snippet pasted into the theme's functions.php.
+		if ( function_exists( 'ekwa_acf_innerblocks_fix_css' ) ) {
+			return true;
+		}
+
+		// Another copy of this fix has already booted.
+		if ( defined( 'EKWA_ACF_INNERBLOCKS_FIX' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Print the CSS. enqueue_block_assets fires on the front end and inside
+	 * the block editor canvas, so this one callback covers both.
+	 */
+	function ekwa_innerblocks_fix_enqueue() {
+		wp_register_style( 'ekwa-innerblocks-fix', false, array(), EKWA_SETTINGS_VERSION );
+		wp_enqueue_style( 'ekwa-innerblocks-fix' );
+		wp_add_inline_style( 'ekwa-innerblocks-fix', ekwa_innerblocks_fix_styles() );
+	}
+
+	/**
+	 * Decide, once the theme is loaded, whether anything needs doing.
+	 */
+	function ekwa_innerblocks_fix_boot() {
+		if ( ekwa_innerblocks_fix_handled_elsewhere() ) {
+			return;
+		}
+
+		define( 'EKWA_ACF_INNERBLOCKS_FIX', true );
+
+		add_action( 'enqueue_block_assets', 'ekwa_innerblocks_fix_enqueue' );
+	}
+
+	add_action( 'after_setup_theme', 'ekwa_innerblocks_fix_boot', 99 );
 }
-
-// Front end.
-add_action( 'wp_enqueue_scripts', function() {
-    wp_register_style( 'ekwa-acf-innerblocks-fix', false );
-    wp_enqueue_style( 'ekwa-acf-innerblocks-fix' );
-    wp_add_inline_style( 'ekwa-acf-innerblocks-fix', ekwa_acf_innerblocks_fix_css() );
-}, 20 );
-
-// Block editor.
-add_action( 'enqueue_block_editor_assets', function() {
-    wp_register_style( 'ekwa-acf-innerblocks-fix-editor', false );
-    wp_enqueue_style( 'ekwa-acf-innerblocks-fix-editor' );
-    wp_add_inline_style( 'ekwa-acf-innerblocks-fix-editor', ekwa_acf_innerblocks_fix_css() );
-} );
-
-
-add_action( 'after_setup_theme', function() {
-    add_editor_style( 'css/acf-innerblocks-fix.css' );
-} );
-
